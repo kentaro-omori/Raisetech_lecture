@@ -3,10 +3,10 @@
 ```
 $ puma --version
 ```
-puma version 5.6.4
+* puma version 5.6.4
 
 ### APサーバーを終了させたときの動作
-Oops No application seems to be running here!  
+* Oops No application seems to be running here!  
 と表示される。
 
 APサーバーを再度起動させると正常に表示される。
@@ -18,13 +18,13 @@ APサーバーを再度起動させると正常に表示される。
 ```
 $ mysql --version
 ```
-mysql  Ver 8.0.29 for Linux on x86_64 (MySQL Community Server - GPL)
+* mysql  Ver 8.0.29 for Linux on x86_64 (MySQL Community Server - GPL)
 
 ### DBサーバーを終了させたときの動作
 ```
 $ sudo service mysqld stop
 ```
-ActiveRecord::ConnectionNotEstablished  
+* ActiveRecord::ConnectionNotEstablished  
 Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)  
 というエラーが表示される。
 
