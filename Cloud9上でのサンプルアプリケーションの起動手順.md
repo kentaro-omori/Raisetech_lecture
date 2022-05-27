@@ -40,7 +40,7 @@ Bundle complete!
 $ bundle exec rails db:create
 ```
 
-### Mysql2::Error::ConnectionErrorが出た。
+### Mysql2::Error::ConnectionErrorが出た
 socketファイルの場所がデフォルトの位置にないのでconfig/database.ymlを修正。
 ```
  - /tmp/mysql.sock
