@@ -10,7 +10,7 @@
 
 ## EC2構築
 * キーペアも作成し、SSH接続できることまで確認した。
-* キーペアはキーペアはAWS Systems Managerというところにあった。
+* キーペアはAWS Systems Managerというところにあった。
 ![image](https://user-images.githubusercontent.com/32190870/179990525-9defbf57-45f5-4412-9a98-50a0df2e4b0a.png)
 
 
