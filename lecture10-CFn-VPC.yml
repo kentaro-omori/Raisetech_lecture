@@ -1,0 +1,169 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: RaiseTech lecture10 template for VPC
+
+# ParametersでCIDRブロックを定義
+
+Parameters:
+  VPCCidr: 
+    Type: String
+    Default: "10.0.0.0/16"
+  PublicSubnetACidr:
+    Type: String
+    Default: "10.0.1.0/24"
+  PublicSubnetCCidr:
+    Type: String
+    Default: "10.0.2.0/24"
+  PrivateSubnetACidr:
+    Type: String
+    Default: "10.0.10.0/24"
+  PrivateSubnetCCidr:
+    Type: String
+    Default: "10.0.20.0/24"
+
+Resources:
+  CFnVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCidr
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: lecture10-cfn-VPC
+        - Key: Project
+          Value: RaiseTech
+
+# Subnetの定義
+
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PublicSubnetACidr
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: "ap-northeast-1a"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lecture10-PublicSubnet-a
+        - Key: Project
+          Value: RaiseTech
+
+  PublicSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PublicSubnetCCidr
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: "ap-northeast-1c"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lecture10-PublicSubnet-c
+        - Key: Project
+          Value: RaiseTech
+
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PrivateSubnetACidr
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: "ap-northeast-1a"
+      Tags:
+        - Key: Name
+          Value: lecture10-PrivateSubnet-a
+        - Key: Project
+          Value: RaiseTech
+
+  PrivateSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PrivateSubnetCCidr
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: "ap-northeast-1c"
+      Tags:
+        - Key: Name
+          Value: lecture10-PrivateSubnet-c
+        - Key: Project
+          Value: RaiseTech
+
+# IGWの定義、アタッチ
+
+  CFnVPCIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties: 
+      Tags:
+        - Key: Name
+          Value: lecture10-cfn-igw
+        - Key: Project
+          Value: RaiseTech
+
+  CFnVPCIGWAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties: 
+      InternetGatewayId: !Ref CFnVPCIGW
+      VpcId: !Ref CFnVPC
+
+# RouteTableの定義
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CFnVPC
+      Tags:
+        - Key: Name
+          Value: lecture10-Public-Route
+        - Key: Project
+          Value: RaiseTech
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: CFnVPCIGW
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref CFnVPCIGW
+
+# RouteTableとSubnetの関連付け
+
+  PublicSubnetAAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetCAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetC
+      RouteTableId: !Ref PublicRouteTable
+
+Outputs:
+  VPCID:
+    Description: VPC ID
+    Value: !Ref CFnVPC
+    Export:
+      Name: !Sub ${AWS::StackName}-VPCID
+
+  PublicSubnetA:
+    Description: PublicSubnet-a
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnetA
+
+  PublicSubnetC:
+    Description: PublicSubnet-c
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnetC
+
+  PrivateSubnetA:
+    Description: PrivateSubnet-a
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnetA
+
+  PrivateSubnetC:
+    Description: PrivateSubnet-c
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnetC
