@@ -13,8 +13,6 @@ Parameters:
     Default: 1234ABCD%%%%
     NoEcho: true
 
-# RDSの構築
-
 Resources:
   CFnRDS:
     Type: AWS::RDS::DBInstance
@@ -35,8 +33,6 @@ Resources:
         - Key: Name
           Value: lecture10-cfn-RDS
 
-# Subnetグループの作成
-
   DBSubnetGroup: 
     Type: AWS::RDS::DBSubnetGroup
     Properties: 
@@ -44,8 +40,6 @@ Resources:
       SubnetIds: 
         - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnetA
         - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnetC
-
-# セキュリティグループで3306ポートのインバウンドを許可
 
   DBSecurityGroup:
     Type: AWS::EC2::SecurityGroup

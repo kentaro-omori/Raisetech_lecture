@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: RaiseTech lecture10 template for VPC
 
-# ParametersでCIDRブロックを定義
-
 Parameters:
   VPCCidr: 
     Type: String
@@ -33,8 +31,6 @@ Resources:
           Value: lecture10-cfn-VPC
         - Key: Project
           Value: RaiseTech
-
-# Subnetの定義
 
   PublicSubnetA:
     Type: AWS::EC2::Subnet
@@ -86,8 +82,6 @@ Resources:
         - Key: Project
           Value: RaiseTech
 
-# IGWの定義、アタッチ
-
   CFnVPCIGW:
     Type: AWS::EC2::InternetGateway
     Properties: 
@@ -102,8 +96,6 @@ Resources:
     Properties: 
       InternetGatewayId: !Ref CFnVPCIGW
       VpcId: !Ref CFnVPC
-
-# RouteTableの定義
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -122,8 +114,6 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref CFnVPCIGW
-
-# RouteTableとSubnetの関連付け
 
   PublicSubnetAAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation

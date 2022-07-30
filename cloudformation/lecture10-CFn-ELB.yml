@@ -60,4 +60,3 @@ Outputs:
     Value: !GetAtt FrontLB.DNSName
     Export:
       Name: !Sub ${AWS::StackName}-Endpoint
-

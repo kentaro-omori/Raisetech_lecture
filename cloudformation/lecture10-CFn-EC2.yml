@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: RaiseTech lecture10 template for EC2
 
-# ParametersでVPC作成時のスタック名とEC2のAMI ID(最新のAmazon Linux2のものを取得)を指定
-
 Parameters:
   VPCStack:
     Type: String
@@ -10,8 +8,6 @@ Parameters:
   EC2AMI:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
-
-# EC2インスタンスの作成
 
 Resources:
   NewKeyPair:
@@ -26,7 +22,6 @@ Resources:
       InstanceType: t2.micro
       SubnetId: 
         Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetA
-      # 各種インストールやサーバーの起動を行う時はUserDataに記述
       UserData: !Base64 |
         #! /bin/bash
         yum update -y
@@ -35,8 +30,6 @@ Resources:
       Tags:
         - Key: Name
           Value: lecture10-cfn-EC2
-
-# EC2用のセキュリティグループを作成
 
   EC2SG:
     Type: AWS::EC2::SecurityGroup
