@@ -3,7 +3,8 @@ CircleCIのサンプルコンフィグを使用
 https://github.com/MasatoshiMizumoto/raisetech_documents/tree/main/aws/samples/circleci
 
 * 結果
-(画像)
+![image](https://user-images.githubusercontent.com/32190870/181892739-363571b1-dfb5-461b-bb7e-15f2fb94205e.png)
+
 ---
 ## 感想&学び
 * CircleCIのチュートリアル実施し、サンプルコンフィグを使ってlecture10で作成したCFnのymlファイルのチェックをかけたところ以下のエラーが発生した。  
