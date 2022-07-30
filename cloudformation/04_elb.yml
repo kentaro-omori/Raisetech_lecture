@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for ELB
+Description: Hands-on template for ALB
 
 Parameters:
   VPCStack:
     Type: String
-    Default: lecture10-VPC
+    Default: handson-cfn
   EC2Stack:
     Type: String
-    Default: lecture10-EC2
+    Default: handson-cfn-ec2
 
 Resources:
   FrontLB:
@@ -15,8 +15,8 @@ Resources:
     Properties:
       Name: !Ref AWS::StackName
       Subnets:
-        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetA
-        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetC
+        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1
+        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet2
       SecurityGroups: 
         - !Ref SecurityGroupLB
 
@@ -38,10 +38,10 @@ Resources:
         Fn::ImportValue: !Sub ${VPCStack}-VPCID
       Port: 80
       Protocol: HTTP
-      HealthCheckPath: /
+      HealthCheckPath: /.check_alive
       Targets:
         - Id:
-            Fn::ImportValue: !Sub ${EC2Stack}-CFnEC2
+            Fn::ImportValue: !Sub ${EC2Stack}-EC2WebServer01
 
   SecurityGroupLB:
     Type: AWS::EC2::SecurityGroup
@@ -60,3 +60,4 @@ Outputs:
     Value: !GetAtt FrontLB.DNSName
     Export:
       Name: !Sub ${AWS::StackName}-Endpoint
+

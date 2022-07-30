@@ -1,24 +1,25 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for RDS
+Description: Hands-on template for RDS
 
 Parameters:
   VPCStack:
     Type: String
-    Default: lecture10-VPC
+    Default: handson-cfn
   DBUser:
     Type: String
-    Default: KentaroOmori
+    Default: dbmaster
   DBPassword:
     Type: String
-    Default: 1234ABCD%%%%
+    Default: H&ppyHands0n
     NoEcho: true
 
+  
 Resources:
-  CFnRDS:
+  DBInstance:
     Type: AWS::RDS::DBInstance
     DeletionPolicy: Delete
     Properties:
-      DBInstanceClass: db.t3.micro
+      DBInstanceClass: db.t2.micro
       AllocatedStorage: "10"
       StorageType: gp2
       Engine: MySQL
@@ -29,17 +30,14 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
       VPCSecurityGroups:
         - !Ref DBSecurityGroup
-      Tags:
-        - Key: Name
-          Value: lecture10-cfn-RDS
 
   DBSubnetGroup: 
     Type: AWS::RDS::DBSubnetGroup
     Properties: 
       DBSubnetGroupDescription: DB Subnet Group for Private Subnet
       SubnetIds: 
-        - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnetA
-        - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnetC
+        - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnet1
+        - Fn::ImportValue: !Sub ${VPCStack}-PrivateSubnet2
 
   DBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -56,6 +54,6 @@ Resources:
 
 Outputs:
   DBEndpoint:
-    Value: !GetAtt CFnRDS.Endpoint.Address
+    Value: !GetAtt DBInstance.Endpoint.Address
     Export:
       Name: !Sub ${AWS::StackName}-DBEndpoint

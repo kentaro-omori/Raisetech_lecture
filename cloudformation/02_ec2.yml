@@ -1,40 +1,42 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for EC2
+Description: Hands-on template for EC2
 
 Parameters:
   VPCStack:
     Type: String
-    Default: lecture10-VPC
+    Default: handson-cfn
   EC2AMI:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
 
-Resources:
-  NewKeyPair:
-    Type: AWS::EC2::KeyPair
-    Properties:
-      KeyName: lecture10-KeyPair
-  CFnEC2:
+Resources: 
+  EC2WebServer01:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref EC2AMI
-      KeyName: !Ref NewKeyPair
       InstanceType: t2.micro
       SubnetId: 
-        Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetA
+        Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1
       UserData: !Base64 |
         #! /bin/bash
         yum update -y
+        amazon-linux-extras install php7.2 -y
+        yum -y install mysql httpd php-mbstring php-xml
+
+        wget http://ja.wordpress.org/latest-ja.tar.gz -P /tmp/
+        tar zxvf /tmp/latest-ja.tar.gz -C /tmp
+        cp -r /tmp/wordpress/* /var/www/html/
+        touch /var/www/html/.check_alive
+        chown apache:apache -R /var/www/html
+
+        systemctl enable httpd.service
+        systemctl start httpd.service
       SecurityGroupIds: 
         - !Ref EC2SG
-      Tags:
-        - Key: Name
-          Value: lecture10-cfn-EC2
-
   EC2SG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: SG for lecture10 EC2
+      GroupDescription: sg for web server
       VpcId: 
         Fn::ImportValue: !Sub ${VPCStack}-VPCID
       SecurityGroupIngress:
@@ -42,15 +44,10 @@ Resources:
           CidrIp: 10.0.0.0/16
           FromPort: 80
           ToPort: 80
-        - IpProtocol: tcp
-          CidrIp: 0.0.0.0/0
-          FromPort: 22
-          ToPort: 22        
-      Tags:
-        - Key: Name
-          Value: lecture10-cfn-EC2-SG
+
 Outputs:
-  CFnEC2:
-    Value: !Ref CFnEC2
+  EC2WebServer01:
+    Value: !Ref EC2WebServer01
     Export:
-      Name: !Sub ${AWS::StackName}-CFnEC2
+      Name: !Sub ${AWS::StackName}-EC2WebServer01
+
