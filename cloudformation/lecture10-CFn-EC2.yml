@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: RaiseTech lecture10 template for EC2
 
-# Specify the stack name and EC2 AMI ID (get the latest Amazon Linux2 one) when creating the VPC in Parameters
+# ParametersでVPC作成時のスタック名とEC2のAMI ID(最新のAmazon Linux2のものを取得)を指定
 
 Parameters:
   VPCStack:
