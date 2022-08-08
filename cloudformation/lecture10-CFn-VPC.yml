@@ -41,7 +41,8 @@ Resources:
     Properties:
       CidrBlock: !Ref PublicSubnetACidr
       VpcId: !Ref CFnVPC
-      AvailabilityZone: "ap-northeast-1a"
+#      AvailabilityZone: "ap-northeast-1a"
+      AvailabilityZone: !Select [ 0, !GetAZs ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -54,7 +55,8 @@ Resources:
     Properties:
       CidrBlock: !Ref PublicSubnetCCidr
       VpcId: !Ref CFnVPC
-      AvailabilityZone: "ap-northeast-1c"
+#      AvailabilityZone: "ap-northeast-1c"
+      AvailabilityZone: !Select [ 1, !GetAZs ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -67,7 +69,8 @@ Resources:
     Properties:
       CidrBlock: !Ref PrivateSubnetACidr
       VpcId: !Ref CFnVPC
-      AvailabilityZone: "ap-northeast-1a"
+#      AvailabilityZone: "ap-northeast-1a"
+      AvailabilityZone: !Select [ 0, !GetAZs ]
       Tags:
         - Key: Name
           Value: lecture10-PrivateSubnet-a
@@ -79,7 +82,8 @@ Resources:
     Properties:
       CidrBlock: !Ref PrivateSubnetCCidr
       VpcId: !Ref CFnVPC
-      AvailabilityZone: "ap-northeast-1c"
+#      AvailabilityZone: "ap-northeast-1c"
+      AvailabilityZone: !Select [ 1, !GetAZs ]
       Tags:
         - Key: Name
           Value: lecture10-PrivateSubnet-c
