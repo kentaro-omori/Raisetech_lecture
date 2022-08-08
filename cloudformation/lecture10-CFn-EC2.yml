@@ -11,7 +11,7 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
 
-# create EC2 instance
+# EC2インスタンスの作成
 
 Resources:
   NewKeyPair:
@@ -26,7 +26,7 @@ Resources:
       InstanceType: t2.micro
       SubnetId:
         Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetA
-      # When various installations and server startups are performed, they are described in UserData.
+      # 各種インストールやサーバーの起動を行う時はUserDataに記述
       UserData: !Base64 |
         #! /bin/bash
         yum update -y
@@ -36,7 +36,7 @@ Resources:
         - Key: Name
           Value: lecture10-cfn-EC2
 
-# create SecurityGroup for EC2
+# EC2用のセキュリティグループを作成
 
   EC2SG:
     Type: AWS::EC2::SecurityGroup
