@@ -1,17 +1,17 @@
 version: 2.1
 orbs:
-  python: circleci/python@2.0.3
+#  python: circleci/python@2.0.3
   ansible-playbook: orbss/ansible-playbook@0.0.5
 jobs:
-  cfn-lint:
-    executor: python/default
-    steps:
-      - checkout
-      - run: pip install cfn-lint
-      - run:
-          name: run cfn-lint
-          command: |
-            cfn-lint -i W3002 -t cloudformation/*.yml
+#  cfn-lint:
+#    executor: python/default
+#    steps:
+#      - checkout
+#      - run: pip install cfn-lint
+#      - run:
+#          name: run cfn-lint
+#          command: |
+#            cfn-lint -i W3002 -t cloudformation/*.yml
   ansible:
     executor: ansible-playbook/default
     steps:
@@ -25,15 +25,22 @@ jobs:
           playbook: ansible/test-ansible.yml
           playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
   
-#  serverspec:
+  serverspec:
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: |
+            cd serverspec
+            bundle exec rake spec
 
 workflows:
   raisetech:
     jobs:
-      - cfn-lint
+#      - cfn-lint
       - ansible:
-          requires:
-            - "cfn-lint"
-#      - serverspec:
 #          requires:
-#            - "ansible"
+#            - "cfn-lint"
+      - serverspec:
+          requires:
+            - "ansible"
