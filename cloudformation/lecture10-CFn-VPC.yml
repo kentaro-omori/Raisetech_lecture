@@ -121,7 +121,8 @@ Resources:
 
   PublicRoute:
     Type: AWS::EC2::Route
-    DependsOn: CFnVPCIGW
+    # GatewayIdを指定しているので削除.cfn-lintに怒られた
+    #DependsOn: CFnVPCIGW
     Properties:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
