@@ -1,0 +1,9 @@
+- hosts: 13.231.224.255
+
+  tasks:
+  - name: ls
+    shell: ls
+    register: result_ls
+  - name: result_ls
+    debug:
+      msg: "{{ result_ls.stdout }}"
