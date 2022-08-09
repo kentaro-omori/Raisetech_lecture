@@ -31,7 +31,7 @@ workflows:
   raisetech:
     jobs:
       - cfn-lint
-      - ansible
+      - ansible:
           requires:
             - "cfn-lint"
 #      - serverspec:
