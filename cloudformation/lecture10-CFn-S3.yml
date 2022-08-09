@@ -7,7 +7,7 @@ Resources:
   CFnS3:
     Type: AWS::S3::Bucket
     # DeletionPolicyをRetainにすることでスタックを削除してもバケットは残るようにしてみる
-    # Retainの動作確認ができたのでDeleteに変更
+    # Retainの動作確認ができたのでDeleteに変更.
     DeletionPolicy: Delete
     Properties: 
       BucketName: lecture10-s3-20220720
