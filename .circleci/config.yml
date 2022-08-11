@@ -33,9 +33,10 @@ jobs:
       BUNDLE_JOBS: '3'
       BUNDLE_RETRY: '3'
     steps:
-      - checkout
+      - checkout:
+          path: ~/serverspec
       - ruby/install-deps:
-          app-dir: 'serverspec'
+          # app-dir: 'serverspec'
       - run:
           name: Test
           command: |
