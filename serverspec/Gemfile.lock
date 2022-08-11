@@ -3,5 +3,8 @@ GEM
   specs:
     serverspec
 
+PLATFORMS
+  x86_64-linux
+
 BUNDLED WITH
   2.2.28
