@@ -35,8 +35,8 @@ jobs:
     steps:
       - checkout:
           path: '~/serverspec'
-      - ruby/install-deps
-          # app-dir: 'serverspec'
+      - ruby/install-deps:
+          app-dir: 'serverspec'
       - run:
           name: Test
           command: |
