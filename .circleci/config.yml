@@ -34,6 +34,9 @@ jobs:
       #     path: '~/serverspec'
       # - ruby/install-deps:
       #     app-dir: 'serverspec'
+      - add_ssh_keys:
+          fingerprints:
+            - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
       - run:
           name: Test
           command: |
