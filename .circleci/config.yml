@@ -30,9 +30,8 @@ jobs:
     docker:
       - image: 'cimg/ruby:2.7'
     steps:
-      - checkout
-      # - checkout:
-      #     path: '~/serverspec'
+      - checkout:
+          path: '~/serverspec'
       # - ruby/install-deps:
       #     app-dir: 'serverspec'
       - run:
