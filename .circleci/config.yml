@@ -1,7 +1,8 @@
 version: 2.1
-# orbs:
-#   python: circleci/python@2.0.3
-#   ansible-playbook: orbss/ansible-playbook@0.0.5
+orbs:
+  # python: circleci/python@2.0.3
+  # ansible-playbook: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@1.8.0
 jobs:
   # cfn-lint:
   #   executor: python/default
@@ -26,8 +27,12 @@ jobs:
   #         playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
   
   execute-serverspec:
-    docker:
-      - image: circleci/ruby:2.6.3-node
+    build:
+      docker:
+        - image: 'cimg/ruby:2.7'
+      steps:
+        - checkout
+        - ruby/install-deps
     steps:
       - checkout:
           path: '~/serverspec'
