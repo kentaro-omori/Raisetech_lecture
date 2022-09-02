@@ -30,16 +30,20 @@ jobs:
     docker:
       - image: 'cimg/ruby:2.7'
     steps:
-      - checkout:
-          path: '~/serverspec'
-      - ruby/install-deps:
-          app-dir: 'serverspec'
+      - checkout
+      # - checkout:
+      #     path: '~/serverspec'
+      # - ruby/install-deps:
+      #     app-dir: 'serverspec'
       - run:
           name: Test
           command: |
-            cd serverspec
-            bundle exec rake spec
-
+            gem install bundler
+            gem install serverspec
+            gem install rake
+            gem install ed25519 -v '1.2'
+            gem install bcrypt_pbkdf -v '1.0'
+            rake
 
 workflows:
   raisetech:
