@@ -27,12 +27,8 @@ jobs:
   #         playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
   
   execute-serverspec:
-    build:
-      docker:
-        - image: 'cimg/ruby:2.7'
-      steps:
-        - checkout
-        - ruby/install-deps
+    docker:
+      - image: 'cimg/ruby:2.7'
     steps:
       - checkout:
           path: '~/serverspec'
