@@ -2,31 +2,30 @@ version: 2.1
 orbs:
   python: circleci/python@2.0.3
   ansible-playbook: orbss/ansible-playbook@0.0.5
-  ruby: circleci/ruby@1.8.0
 jobs:
-  cfn-lint:
-    executor: python/default
-    steps:
-      - checkout
-      - run: pip install cfn-lint
-      - run:
-          name: run cfn-lint
-          command: |
-            cfn-lint -i W3002 -t cloudformation/*.yml
-  ansible:
-    executor: ansible-playbook/default
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
-      - ansible-playbook/install:
-          version: 2.10.3
-      - ansible-playbook/playbook:
-          playbook: ansible/test-ansible.yml
-          playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
+  # cfn-lint:
+  #   executor: python/default
+  #   steps:
+  #     - checkout
+  #     - run: pip install cfn-lint
+  #     - run:
+  #         name: run cfn-lint
+  #         command: |
+  #           cfn-lint -i W3002 -t cloudformation/*.yml
+  # execute-ansible:
+  #   executor: ansible-playbook/default
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
+  #     - ansible-playbook/install:
+  #         version: 2.10.3
+  #     - ansible-playbook/playbook:
+  #         playbook: ansible/test-ansible.yml
+  #         playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
   
-  serverspec:
+  execute-serverspec:
     docker:
       - image: 'cimg/ruby:2.7-node'
     environment:
@@ -47,10 +46,11 @@ jobs:
 workflows:
   raisetech:
     jobs:
-      - cfn-lint
-      - ansible:
-          requires:
-            - "cfn-lint"
-      - serverspec:
-          requires:
-            - "ansible"
+      # - cfn-lint
+      # - execute-ansible:
+      #     requires:
+      #       - "cfn-lint"
+      # - execute-serverspec:
+      #     requires:
+      #       - "execute-ansible"
+      - execute-serverspec
