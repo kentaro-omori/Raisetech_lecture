@@ -27,7 +27,7 @@ jobs:
   
   execute-serverspec:
     docker:
-      - image: cimg/ruby:2.7
+      - image: circleci/ruby:2.6.3-node
     steps:
       - checkout:
           path: '~/serverspec'
