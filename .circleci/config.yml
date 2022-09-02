@@ -1,7 +1,7 @@
 version: 2.1
-orbs:
-  python: circleci/python@2.0.3
-  ansible-playbook: orbss/ansible-playbook@0.0.5
+# orbs:
+#   python: circleci/python@2.0.3
+#   ansible-playbook: orbss/ansible-playbook@0.0.5
 jobs:
   # cfn-lint:
   #   executor: python/default
@@ -27,10 +27,7 @@ jobs:
   
   execute-serverspec:
     docker:
-      - image: 'cimg/ruby:2.7-node'
-    environment:
-      BUNDLE_JOBS: '3'
-      BUNDLE_RETRY: '3'
+      - image: cimg/ruby:2.7
     steps:
       - checkout:
           path: '~/serverspec'
