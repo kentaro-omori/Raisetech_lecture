@@ -20,7 +20,6 @@ host = ENV['ec2_server']
 options = Net::SSH::Config.for(host)
 
 # options[:user] ||= Etc.getlogin
-# options[:user] ||= "ec2-user"
 options[:user] ||= ENV['ec2_user']
 
 set :host,        options[:host_name] || host
