@@ -19,7 +19,7 @@ host = ENV['TARGET_HOST']
 options = Net::SSH::Config.for(host)
 
 # options[:user] ||= Etc.getlogin
-options[:user] ||= "Raisetech"
+options[:user] ||= "ec2-user"
 
 set :host,        options[:host_name] || host
 set :ssh_options, options
