@@ -45,19 +45,20 @@ jobs:
           inventory: <<parameters.inventory>>
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
+  
   execute-serverspec:
     docker:
       - image: 'cimg/ruby:2.7'
     steps:
       - checkout
       - run:
-          name: set Environmental Variables
+          name: Set Environmental Variables
           command: |
             echo "export ec2_server=$HOST_NAME" >> $BASH_ENV
             echo "export ec2_user=$USER_NAME" >> $BASH_ENV
             source $BASH_ENV
       - run:
-          name: Test
+          name: Environment Setup & Execute Test
           command: |
             gem install bundler
             gem install serverspec
