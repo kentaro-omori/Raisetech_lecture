@@ -1,42 +1,55 @@
+---
 version: 2.1
+
 orbs:
-  # python: circleci/python@2.0.3
-  ansible-playbook: orbss/ansible-playbook@0.0.5
+  ansible: orbss/ansible-playbook@0.0.5
   ruby: circleci/ruby@1.8.0
+
+executors:
+  python:
+    docker:
+      - image: circleci/python
+
 jobs:
-  # cfn-lint:
-  #   executor: python/default
-  #   steps:
-  #     - checkout
-  #     - run: pip install cfn-lint
-  #     - run:
-  #         name: run cfn-lint
-  #         command: |
-  #           cfn-lint -i W3002 -t cloudformation/*.yml
   execute-ansible:
-    executor: ansible-playbook/default
+    executor: python
+    parameters:
+      version:
+        description: |
+          Ansible version
+        type: string
+        default: ''
+      inventory:
+        description: |
+          Ansible inventory file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+        default: NONEXISTENT_ANSIBLE_INVENTORY
+      playbook:
+        description: |
+          The path of Ansible playbook
+        type: string
+      private-key:
+        description: |
+          SSH private key file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+        default: NONEXISTENT_ANSIBLE_SSH_KEY
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
-      - ansible-playbook/install:
-          version: 2.10.3
-      - ansible-playbook/playbook:
-          playbook: ansible/test-ansible.yml
-          playbook-options: "-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa"
-  
+      - ansible/install:
+          version: <<parameters.version>>
+      - ansible/playbook:
+          inventory: <<parameters.inventory>>
+          playbook: <<parameters.playbook>>
+          private-key: <<parameters.private-key>>
   execute-serverspec:
     docker:
       - image: 'cimg/ruby:2.7'
     steps:
       - checkout
-      #     path: '~/serverspec'
-      # - ruby/install-deps:
-      #     app-dir: 'serverspec'
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
       - run:
           name: set Environmental Variables
           command: |
@@ -49,19 +62,15 @@ jobs:
             gem install bundler
             gem install serverspec
             gem install rake
-            gem install ed25519 -v '1.2'
-            gem install bcrypt_pbkdf -v '1.0'
             rake spec
 
 workflows:
   raisetech:
     jobs:
-      # - cfn-lint
-      # - execute-ansible:
-      #     requires:
-      #       - "cfn-lint"
-      - execute-ansible
+      - execute-ansible:
+          inventory: ANSIBLE_INVENTORY
+          playbook: ansible/playbook.yml
+          private-key: ANSIBLE_SSH_KEY
       - execute-serverspec:
           requires:
             - "execute-ansible"
-      # - execute-serverspec
