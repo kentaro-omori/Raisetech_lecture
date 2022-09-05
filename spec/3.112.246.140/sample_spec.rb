@@ -2,10 +2,10 @@ require 'spec_helper'
 
 listen_port = 80
 
-describe package('rails') do
-#  it { should be_installed.with_version('2.6.3') }
-  it { should be_installed.by('gem').with_version('6.1.3.1') }
-end
+# describe package('rails') do
+# #  it { should be_installed.with_version('2.6.3') }
+#   it { should be_installed.by('gem').with_version('6.1.3.1') }
+# end
 
 describe package('nginx') do
   it { should be_installed }
@@ -16,9 +16,9 @@ describe service('nginx') do
   it { should be_running }
 end
 
-describe package('unicorn') do
-  it { should be_installed.by('gem') }
-end
+# describe package('unicorn') do
+#   it { should be_installed.by('gem') }
+# end
 
 describe port(listen_port) do
   it { should be_listening }
