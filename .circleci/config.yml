@@ -1,17 +1,79 @@
+---
 version: 2.1
+
 orbs:
-  python: circleci/python@2.0.3
+  ansible: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@1.8.0
+
+executors:
+  python:
+    docker:
+      - image: circleci/python
+
 jobs:
-  cfn-lint:
-    executor: python/default
+  execute-ansible:
+    executor: python
+    parameters:
+      version:
+        description: |
+          Ansible version
+        type: string
+        default: ''
+      inventory:
+        description: |
+          Ansible inventory file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+        default: NONEXISTENT_ANSIBLE_INVENTORY
+      playbook:
+        description: |
+          The path of Ansible playbook
+        type: string
+      private-key:
+        description: |
+          SSH private key file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+        default: NONEXISTENT_ANSIBLE_SSH_KEY
     steps:
       - checkout
-      - run: pip install cfn-lint
+      - ansible/install:
+          version: <<parameters.version>>
+      - ansible/playbook:
+          inventory: <<parameters.inventory>>
+          playbook: <<parameters.playbook>>
+          private-key: <<parameters.private-key>>
+  
+  execute-serverspec:
+    docker:
+      - image: 'cimg/ruby:2.7'
+    steps:
+      - checkout
       - run:
-          name: run cfn-lint
+          name: Set Environmental Variables
           command: |
-            cfn-lint -i W3002 -t cloudformation/*.yml
+            echo "export ec2_server=$HOST_NAME" >> $BASH_ENV
+            echo "export ec2_user=$USER_NAME" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Environment Setup & Execute Test
+          command: |
+            gem install bundler
+            gem install serverspec
+            gem install rake
+            gem install ed25519 -v '1.2'
+            gem install bcrypt_pbkdf -v '1.0'
+            rake spec
+
 workflows:
   raisetech:
     jobs:
-      - cfn-lint
+      - execute-ansible:
+          inventory: ANSIBLE_INVENTORY
+          playbook: ansible/playbook.yml
+          private-key: ANSIBLE_SSH_KEY
+      - execute-serverspec:
+          requires:
+            - "execute-ansible"
