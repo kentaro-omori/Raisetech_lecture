@@ -1,5 +1,6 @@
-- hosts: 3.112.246.140
-
+---
+- hosts: web
+  become: yes
   tasks:
   - name: ls
     shell: ls
@@ -7,3 +8,7 @@
   - name: result_ls
     debug:
       msg: "{{ result_ls.stdout }}"
+  - name: installed git
+    yum:
+      name: git
+      state: installed
