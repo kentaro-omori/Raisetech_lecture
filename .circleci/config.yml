@@ -40,7 +40,7 @@ jobs:
       - run:
           name: set Environmental Variables
           command: |
-            echo "export ec2=$TARGET_HOST" >> $BASH_ENV
+            echo "export ec2_server=$TARGET_HOST" >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Test
