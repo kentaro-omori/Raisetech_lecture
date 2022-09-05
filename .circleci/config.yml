@@ -38,6 +38,10 @@ jobs:
       #     fingerprints:
       #       - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
       - run:
+          name: set Environmental Variables
+          command: |
+            echo "export TARGET_HOST=$TARGET_HOST" >> $BASH_ENV
+      - run:
           name: Test
           command: |
             gem install bundler
@@ -45,7 +49,7 @@ jobs:
             gem install rake
             gem install ed25519 -v '1.2'
             gem install bcrypt_pbkdf -v '1.0'
-            bundle exec rake spec:$TARGET_HOST
+            rake spec
 
 workflows:
   raisetech:
