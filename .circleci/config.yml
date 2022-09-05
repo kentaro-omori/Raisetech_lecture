@@ -41,8 +41,7 @@ jobs:
           name: set Environmental Variables
           command: |
             echo "export TARGET_HOST=$TARGET_HOST" >> $BASH_ENV
-            echo $TARGET_HOST
-            echo $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Test
           command: |
