@@ -1,8 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for VPC
+Description: RaiseTech lecture14 template for VPC
 
 # ParametersでCIDRブロックを定義
-
 Parameters:
   VPCCidr: 
     Type: String
@@ -19,6 +18,9 @@ Parameters:
   PrivateSubnetCCidr:
     Type: String
     Default: "10.0.20.0/24"
+  Env:
+    Type: String
+    Default: lecture14
 
 Resources:
   CFnVPC:
@@ -30,23 +32,21 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: lecture10-cfn-VPC
+          Value: !Sub ${Env}-VPC
         - Key: Project
           Value: RaiseTech
 
 # Subnetの定義
-
   PublicSubnetA:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: !Ref PublicSubnetACidr
       VpcId: !Ref CFnVPC
-#      AvailabilityZone: "ap-northeast-1a"
       AvailabilityZone: !Select [ 0, !GetAZs ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: lecture10-PublicSubnet-a
+          Value: !Sub ${Env}-PublicSubnet-a
         - Key: Project
           Value: RaiseTech
 
@@ -55,12 +55,11 @@ Resources:
     Properties:
       CidrBlock: !Ref PublicSubnetCCidr
       VpcId: !Ref CFnVPC
-#      AvailabilityZone: "ap-northeast-1c"
       AvailabilityZone: !Select [ 1, !GetAZs ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: lecture10-PublicSubnet-c
+          Value: !Sub ${Env}-PublicSubnet-c
         - Key: Project
           Value: RaiseTech
 
@@ -69,11 +68,10 @@ Resources:
     Properties:
       CidrBlock: !Ref PrivateSubnetACidr
       VpcId: !Ref CFnVPC
-#      AvailabilityZone: "ap-northeast-1a"
       AvailabilityZone: !Select [ 0, !GetAZs ]
       Tags:
         - Key: Name
-          Value: lecture10-PrivateSubnet-a
+          Value: !Sub ${Env}-PrivateSubnet-a
         - Key: Project
           Value: RaiseTech
 
@@ -82,22 +80,20 @@ Resources:
     Properties:
       CidrBlock: !Ref PrivateSubnetCCidr
       VpcId: !Ref CFnVPC
-#      AvailabilityZone: "ap-northeast-1c"
       AvailabilityZone: !Select [ 1, !GetAZs ]
       Tags:
         - Key: Name
-          Value: lecture10-PrivateSubnet-c
+          Value: !Sub ${Env}-PrivateSubnet-c
         - Key: Project
           Value: RaiseTech
 
 # IGWの定義、アタッチ
-
   CFnVPCIGW:
     Type: AWS::EC2::InternetGateway
     Properties: 
       Tags:
         - Key: Name
-          Value: lecture10-cfn-igw
+          Value: !Sub ${Env}-igw
         - Key: Project
           Value: RaiseTech
 
@@ -108,28 +104,24 @@ Resources:
       VpcId: !Ref CFnVPC
 
 # RouteTableの定義
-
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref CFnVPC
       Tags:
         - Key: Name
-          Value: lecture10-Public-Route
+          Value: !Sub ${Env}-Public-Route
         - Key: Project
           Value: RaiseTech
 
   PublicRoute:
     Type: AWS::EC2::Route
-    # GatewayIdを指定しているので削除.cfn-lintに怒られた.
-    #DependsOn: CFnVPCIGW
     Properties:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref CFnVPCIGW
 
 #RouteTableとSubnetの関連付け
-
   PublicSubnetAAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:

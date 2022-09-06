@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for ELB
+Description: RaiseTech lecture14 template for ELB
 
 Parameters:
   VPCStack:
     Type: String
-    Default: lecture10-VPC
+    Default: lecture14-VPC
   EC2Stack:
     Type: String
-    Default: lecture10-EC2
+    Default: lecture14-EC2
 
 Resources:
   FrontLB:

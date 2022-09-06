@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech lecture10 template for RDS
+Description: RaiseTech lecture14 template for RDS
 
 Parameters:
   VPCStack:
     Type: String
-    Default: lecture10-VPC
+    Default: lecture14-VPC
   DBUser:
     Type: String
     Default: KentaroOmori
@@ -12,6 +12,9 @@ Parameters:
     Type: String
     Default: 1234ABCD%%%%
     NoEcho: true
+  Env:
+    Type: String
+    Default: lecture14
 
 # RDSの構築
 
@@ -33,7 +36,7 @@ Resources:
         - !Ref DBSecurityGroup
       Tags:
         - Key: Name
-          Value: lecture10-cfn-RDS
+          Value: ${Env}-RDS
 
 # Subnetグループの作成
 

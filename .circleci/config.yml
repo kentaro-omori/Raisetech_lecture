@@ -2,6 +2,7 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@3.1.3
   ansible: orbss/ansible-playbook@0.0.5
   ruby: circleci/ruby@1.8.0
 
@@ -11,6 +12,24 @@ executors:
       - image: circleci/python
 
 jobs:
+  execute-cloudformation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-region: AWS_DEFAULT_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+      - run:
+          name: Deploy CloudFormation
+          command: |
+            set -x
+            aws cloudformation deploy --stack-name lecture14-VPC --template-file cloudformation/CFn-VPC.yml
+            aws cloudformation deploy --stack-name lecture14-EC2 --template-file cloudformation/CFn-EC2.yml
+            aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml
+            aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
+            aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
+
   execute-ansible:
     executor: python
     parameters:
@@ -45,7 +64,7 @@ jobs:
           inventory: <<parameters.inventory>>
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-  
+
   execute-serverspec:
     docker:
       - image: 'cimg/ruby:2.7'
@@ -70,10 +89,13 @@ jobs:
 workflows:
   raisetech:
     jobs:
+      - execute-cloudformation
       - execute-ansible:
           inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
+          requires:
+            - "execute-cloudformation"
       - execute-serverspec:
           requires:
             - "execute-ansible"
