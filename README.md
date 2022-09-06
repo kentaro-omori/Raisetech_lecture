@@ -9,12 +9,21 @@
 5. 3番目のworkflowとしてServerspecで自動テストを実行する
 
 ## 実行環境
+### aws cli
+```
+```
+
 ### ansible
 ```
 ansible [core 2.12.7]
 ```
 
 ### Serverspec
+```
+
+```
+
+### ruby
 ```
 
 ```
