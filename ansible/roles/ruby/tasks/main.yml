@@ -45,6 +45,7 @@
 
 - name: Install ruby
   shell: bash -lc "rbenv install -s {{ ruby_version }}"
+  when: installed_ruby_versions.stdout_lines.count(ruby_version) == 0
 
 - name: Set global ruby version
   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
