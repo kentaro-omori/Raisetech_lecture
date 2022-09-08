@@ -64,7 +64,7 @@
 #   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
 
 - name: Install bundler
-    shell: bash -lc 'gem install bundler -v "{{ bundler_version }}"'
+    shell: bash -lc 'gem install bundler -v {{ bundler_version }}'
 
 - name: Install rails
   gem:
