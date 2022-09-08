@@ -1,0 +1,10 @@
+---
+- name: Registration nodejs on Yum repo
+  shell: curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
+  when: not ansible_check_mode
+
+- name: Install nodejs from yum
+  yum:
+    name: nodejs
+    state: installed
+  ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視

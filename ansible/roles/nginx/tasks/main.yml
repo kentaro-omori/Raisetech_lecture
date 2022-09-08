@@ -1,2 +1,17 @@
 ---
-# tasks file for nginx
+- name: Install the prerequisites
+  yum:
+    name: yum-utils
+    state: installed
+
+- name: Create Nginx repo
+  template:
+    src: roles/nginx/templates/nginx.repo.j2
+    dest: /etc/yum.repos.d/nginx.repo
+    when: not ansible_check_mode
+
+- name: Install Nginx
+  become: yes
+  yum:
+    name: nginx
+  ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視

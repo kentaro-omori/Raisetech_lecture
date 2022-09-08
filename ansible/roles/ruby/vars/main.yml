@@ -1,0 +1,5 @@
+rbenv_download_url: 'https://github.com/sstephenson/rbenv.git'
+ruby_build_download_url: 'https://github.com/sstephenson/ruby-build.git'
+rbenv_root: '/usr/local/rbenv'
+ruby_version: 2.6.3
+bundler_version: 2.2.28
