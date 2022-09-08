@@ -31,17 +31,17 @@
   check_mode: no
   register: installed_ruby_versions
 
+- name: Install rbenv
+  git:
+    repo: "{{ rbenv_download_url }}"
+    dest: "{{ rbenv_root }}"
+
 - name: "install ruby {{ ruby_version }}"
   command: "bash -lc 'rbenv install {{ ruby_version }}'"
   when: installed_ruby_versions.stdout_lines.count(ruby_version) == 0
 
 - name: "set global ruby to {{ ruby_version }}"
   command: "bash -lc 'rbenv global {{ ruby_version }}'"
-
-# - name: Install rbenv
-#   git:
-#     repo: "{{ rbenv_download_url }}"
-#     dest: "{{ rbenv_root }}"
 
 # - name: Edit bashrc
 #   template:
