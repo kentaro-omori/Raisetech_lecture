@@ -8,7 +8,7 @@
   template:
     src: roles/nginx/templates/nginx.repo.j2
     dest: /etc/yum.repos.d/nginx.repo
-    when: not ansible_check_mode
+  when: not ansible_check_mode
 
 - name: Install Nginx
   become: yes
