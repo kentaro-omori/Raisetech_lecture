@@ -6,7 +6,6 @@
 - name: Install nodejs from yum
   yum:
     name: nodejs
-    version: "{{ nodejs_version }}"
     state: installed
   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
 
