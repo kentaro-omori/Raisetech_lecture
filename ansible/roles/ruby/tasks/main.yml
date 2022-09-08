@@ -18,6 +18,14 @@
       - sqlite-devel
     state: present
 
+- name: create rbenv versions dir
+  file:
+    path: "{{ rbenv_root }}/versions"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Install rbenv
   git:
     repo: "{{ rbenv_download_url }}"
@@ -69,7 +77,6 @@
 
 # bundler同様railsもインストールできない
 - name: Install rails
-  become: yes
   gem:
     name: rails
     version: "{{ rails_version }}"
