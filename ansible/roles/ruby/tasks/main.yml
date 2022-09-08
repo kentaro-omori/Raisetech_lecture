@@ -68,17 +68,18 @@
   shell: bash -lc 'gem install bundler:{{ bundler_version }}'
 
 # bundler同様railsもインストールできない
-# - name: Install rails
-#   gem:
-#     name: rails
-#     version: "{{ rails_version }}"
-#     executable: "{{ rbenv_root }}/shims/gem"
-#     state: present
-#     user_install: no
-#   environment:
-#     RBENV_VERSION: "{{ ruby_version }}"
-#   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
+- name: Install rails
+  become: yes
+  gem:
+    name: rails
+    version: "{{ rails_version }}"
+    executable: "{{ rbenv_root }}/shims/gem"
+    state: present
+    user_install: no
+  environment:
+    RBENV_VERSION: "{{ ruby_version }}"
+  ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
 
 # 
-- name: Install rails
-  shell: bash -lc 'gem install rails -v {{ rails_version }}'
+# - name: Install rails
+#   shell: bash -lc 'gem install rails -v {{ rails_version }}'
