@@ -1,0 +1,26 @@
+---
+- name: Remove MariaDB
+  become: yes
+  yum:
+    name: mariadb-libs
+    state: absent
+
+- name: Install MySQL
+  become: yes
+  yum: 'https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm'
+    state: present
+
+- name: Import MySQL GPG key
+  become: yes
+  rpm_key:
+    state: present
+    key: 'https://repo.mysql.com/RPM-GPG-KEY-mysql-2022'
+
+- name: Install MySQL package
+  become: yes
+  yum:
+    name:
+      - mysql-community-devel
+      - mysql-community-server
+
+

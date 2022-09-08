@@ -2,7 +2,7 @@
 - name: Install the prerequisites
   yum:
     name: yum-utils
-    state: installed
+    state: present
 
 - name: Create Nginx repo
   template:

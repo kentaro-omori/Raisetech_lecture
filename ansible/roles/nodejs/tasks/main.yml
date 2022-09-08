@@ -6,7 +6,7 @@
 - name: Install nodejs from yum
   yum:
     name: nodejs
-    state: installed
+    state: present
   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
 
 - name: Install yarn
