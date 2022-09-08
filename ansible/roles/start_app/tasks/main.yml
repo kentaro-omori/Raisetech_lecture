@@ -1,0 +1,4 @@
+---
+- name: Start nginxd
+  become: yes
+  shell: bash -lc "systemctl start nginx.service"
