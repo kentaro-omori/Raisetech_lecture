@@ -13,4 +13,4 @@
   npm:
     name: yarn
     global: yes
-    state: installed
+    state: present
