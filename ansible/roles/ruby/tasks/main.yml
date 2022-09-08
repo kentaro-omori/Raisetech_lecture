@@ -53,4 +53,6 @@
     name: "rails"
     version: "{{ rails_version }}"
     executable: "{{ rbenv_root }}/shims/gem"
+  environment:
+    RBENV_VERSION: "{{ ruby_version }}"
   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
