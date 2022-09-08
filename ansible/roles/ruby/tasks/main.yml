@@ -41,12 +41,23 @@
 - name: Set global ruby version
   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
 
+- name: Check existing bundler version
+  comamnd:
+    cmd: 'bundle -v'
+    register: exitsting_bundler_version
+
+- name: Uninstall bundler if the version is less than 2.2.28
+  gem:
+    name: bundler
+    state: absent
+    when: exitsting_bundler_version < "{{ bundler_version }}"
+
 - name: Install bundler
   gem:
     name: bundler
     version: "{{ bundler_version }}"
     executable: "{{ rbenv_root }}/shims/gem"
-    state: latest
+    state: present
     user_install: no
   environment:
     RBENV_VERSION: "{{ ruby_version }}"

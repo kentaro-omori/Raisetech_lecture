@@ -49,6 +49,11 @@ jobs:
         description: |
           The path of Ansible playbook
         type: string
+      playbook-options:
+        description: |
+          Ansible-playbook command options
+        type: string
+        default: ''
       private-key:
         description: |
           SSH private key file. The default value must be empty,
@@ -63,6 +68,7 @@ jobs:
       - ansible/playbook:
           inventory: <<parameters.inventory>>
           playbook: <<parameters.playbook>>
+          playbook-options: <<parameters.playbook-options>>
           private-key: <<parameters.private-key>>
 
   execute-serverspec:
@@ -93,6 +99,7 @@ workflows:
       - execute-ansible:
           inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
+          playbook-options: '-vvv'
           private-key: ANSIBLE_SSH_KEY
           requires:
             - "execute-cloudformation"
