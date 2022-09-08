@@ -42,7 +42,7 @@
   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
 
 - name: Check existing bundler version
-  shell: 'bundle -v'
+  shell: bundle -v
   register: exitsting_bundler_version
 
 - name: Uninstall bundler if the version is less than 2.2.28
