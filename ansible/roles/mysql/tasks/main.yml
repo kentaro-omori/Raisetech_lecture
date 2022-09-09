@@ -24,4 +24,4 @@
   yum:
     name:
       - mysql-community-devel
-      - --enablerepo=mysql80-community mysql-community-server
+      - mysql-community-server
