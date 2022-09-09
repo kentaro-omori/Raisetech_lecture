@@ -102,7 +102,7 @@
 - name: Install ruby-build
   git:
     repo: "{{ ruby_build_download_url }}"
-    dest: "{{ rbenv_root }}"/plugins/ruby-build
+    dest: "{{ rbenv_root }}/plugins/ruby-build"
 
 - name: Install Ruby
   shell: bash -lc " rbenv install -s {{ ruby_version }}"
