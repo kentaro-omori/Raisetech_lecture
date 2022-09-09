@@ -7,4 +7,5 @@
     - { role: nginx, tags: nginx }
     - { role: ruby, tags: ruby }
     - { role: mysql, tags: mysql}
+    - { role: git_clone, tags: git_clone}
     - { role: start_app, tags: start_app}
