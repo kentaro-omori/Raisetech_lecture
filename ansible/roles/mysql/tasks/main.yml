@@ -10,7 +10,7 @@
 - name: Install MySQL
   become: yes
   yum:
-    name: 'https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm'
+    name: 'https://dev.mysql.com/get/mysql80-community-release-el7-6.noarch.rpm'
     state: present
 
 - name: Import MySQL GPG key
@@ -24,6 +24,4 @@
   yum:
     name:
       - mysql-community-devel
-      - mysql-community-server
-
-
+      - --enablerepo=mysql80-community mysql-community-server
