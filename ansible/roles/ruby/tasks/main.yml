@@ -61,7 +61,7 @@
   with_items:
     - rbenv-rehash
     - bundler:{{ bundler_version }}
-    - rails -v {{ rails_version }}
+    - rails {{ rails_version }}
   environment:
     RBENV_VERSION: "{{ ruby_version }}"
   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
