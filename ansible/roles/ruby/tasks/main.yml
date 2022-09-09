@@ -18,78 +18,9 @@
       - sqlite-devel
     state: present
 
-# - name: Install rbenv
-#   git:
-#     repo: "{{ rbenv_download_url }}"
-#     dest: "{{ rbenv_root }}"
-
-# - name: Edit bashrc
-#   template:
-#     src: roles/ruby/templates/rbenv_system.sh.j2
-#     dest: /etc/profile.d/rbenv.sh
-#     owner: ec2-user
-#     group: ec2-user
-
-# - name: Install ruby-build
-#   git:
-#     repo: "{{ ruby_build_download_url }}"
-#     dest: /usr/local/rbenv/plugins/ruby-build
-
-# - name: Install ruby
-#   shell: bash -lc "rbenv install -s {{ ruby_version }}"
-
-# - name: Set global ruby version
-#   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
-
-# # gemモジュールを使ったインストールでbundlerが更新されないので、バージョンが古かったら削除したい。未完成。
-# # - name: Check existing bundler version
-# #   shell: bundle -v
-# #   register: exitsting_bundler_version
- 
-# # - name: Uninstall bundler if the version is less than 2.2.28
-# #   gem:
-# #     name: bundler
-# #     state: absent
-# #     when: exitsting_bundler_version < "bundler_version"
-
-# # - name: Install bundler
-# #   gem:
-# #     name: bundler
-# #     version: "{{ bundler_version }}"
-# #     executable: "{{ rbenv_root }}/shims/gem"
-# #     state: present
-# #     user_install: no
-# #   environment:
-# #     RBENV_VERSION: "{{ ruby_version }}"
-# #   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
-
-# # このやり方ならば指定バージョンのbundlerがインストールできた
-# - name: Install bundler
-#   shell: bash -lc 'gem install bundler:{{ bundler_version }}'
-
-# # bundler同様railsもインストールできない
-# - name: Install rails
-#   become: yes
-#   gem:
-#     name: rails
-#     version: "{{ rails_version }}"
-#     executable: "{{ rbenv_root }}/shims/gem"
-#     state: present
-#     user_install: no
-#   environment:
-#     RBENV_VERSION: "{{ ruby_version }}"
-#   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
-
-# # 
-# # - name: Install rails
-# #   shell: bash -lc 'gem install rails -v {{ rails_version }}'
-
-# 9/9はここを参考にやってみる
-# https://mo-gu-mo-gu.com/ansible-web-app-tutorial/
-
 - name: Install rbenv
   git:
-    repo: https://github.com/sstephenson/rbenv.git
+    repo: "{{ rbenv_download_url }}"
     dest: "{{ rbenv_root }}"
 
 - name: Edit bashrc
@@ -104,15 +35,111 @@
     repo: "{{ ruby_build_download_url }}"
     dest: "{{ rbenv_root }}/plugins/ruby-build"
 
-- name: Install Ruby
-  shell: bash -lc " rbenv install -s {{ ruby_version }}"
+- name: Install ruby
+  shell: bash -lc "rbenv install -s {{ ruby_version }}"
 
-- name: Set default Ruby version
+- name: Set global ruby version
   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
 
-- name: Install bundler and so on
-  shell: bash -lc "gem install {{ item }}"
+# gemモジュールを使ったインストールでbundlerが更新されないので、バージョンが古かったら削除したい。未完成。
+# - name: Check existing bundler version
+#   shell: bundle -v
+#   register: exitsting_bundler_version
+ 
+# - name: Uninstall bundler if the version is less than 2.2.28
+#   gem:
+#     name: bundler
+#     state: absent
+#     when: exitsting_bundler_version < "bundler_version"
+
+- name: Install rbenv-rehash, bundler, rails
+  gem:
+    name: "{{ item }}"
+    version: "{{ bundler_version }}"
+    executable: "{{ rbenv_root }}/shims/gem"
+    state: present
+    user_install: no
   with_items:
     - rbenv-rehash
     - bundler:{{ bundler_version }}
     - rails -v {{ rails_version }}
+  environment:
+    RBENV_VERSION: "{{ ruby_version }}"
+  ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
+
+# - name: Install bundler
+#   gem:
+#     name: bundler
+#     version: "{{ bundler_version }}"
+#     executable: "{{ rbenv_root }}/shims/gem"
+#     state: present
+#     user_install: no
+#   environment:
+#     RBENV_VERSION: "{{ ruby_version }}"
+#   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
+
+# # このやり方ならば指定バージョンのbundlerがインストールできた
+# - name: Install bundler
+#   shell: bash -lc 'gem install bundler:{{ bundler_version }}'
+
+# # 
+# - name: Install rbenv-rehash
+#   become: yes
+#   gem:
+#     name: rbenv-rehash
+#     executable: "{{ rbenv_root }}/shims/gem"
+#     state: present
+#     user_install: no
+#   environment:
+#     RBENV_VERSION: "{{ ruby_version }}"
+#   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
+
+# # bundler同様railsもインストールできない
+# - name: Install rails
+#   become: yes
+#   gem:
+#     name: rails
+#     version: "{{ rails_version }}"
+#     executable: "{{ rbenv_root }}/shims/gem"
+#     state: present
+#     user_install: no
+#   environment:
+#     RBENV_VERSION: "{{ ruby_version }}"
+#   ignore_errors: "{{ ansible_check_mode }}" # dry-run時のエラーを無視
+
+# 
+# - name: Install rails
+#   shell: bash -lc 'gem install rails -v {{ rails_version }}'
+
+# # 9/9はここを参考にやってみる。この方法でrailsインストールできた。
+# # https://mo-gu-mo-gu.com/ansible-web-app-tutorial/
+
+# - name: Install rbenv
+#   git:
+#     repo: https://github.com/sstephenson/rbenv.git
+#     dest: "{{ rbenv_root }}"
+
+# - name: Edit bashrc
+#   template:
+#     src: roles/ruby/templates/rbenv_system.sh.j2
+#     dest: /etc/profile.d/rbenv.sh
+#     owner: ec2-user
+#     group: ec2-user
+
+# - name: Install ruby-build
+#   git:
+#     repo: "{{ ruby_build_download_url }}"
+#     dest: "{{ rbenv_root }}/plugins/ruby-build"
+
+# - name: Install Ruby
+#   shell: bash -lc " rbenv install -s {{ ruby_version }}"
+
+# - name: Set default Ruby version
+#   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
+
+# - name: Install bundler and so on
+#   shell: bash -lc "gem install {{ item }}"
+#   with_items:
+#     - rbenv-rehash
+#     - bundler:{{ bundler_version }}
+#     - rails -v {{ rails_version }}
