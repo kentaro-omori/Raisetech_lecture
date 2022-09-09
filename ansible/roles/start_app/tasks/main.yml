@@ -17,7 +17,6 @@
   shell: bash -lc "systemctl start nginx.service"  
 
 - name: Set database
-  become: yes
   block:
   - name: Create database
     command:

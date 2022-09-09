@@ -68,6 +68,10 @@ Resources:
           CidrIp: 0.0.0.0/0
           FromPort: 22
           ToPort: 22
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 3000
+          ToPort: 3000
       Tags:
         - Key: Name
           Value: !Sub ${Env}-EC2-SG
