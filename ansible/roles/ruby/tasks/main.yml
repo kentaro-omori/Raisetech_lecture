@@ -1,5 +1,5 @@
 ---
-- name: Install Ruby dependencies packages
+- name: Install Ruby/Rails dependencies packages
   yum:
     name:
       - gcc-c++
@@ -16,6 +16,9 @@
       - libxml2-devel
       - libxslt-devel
       - sqlite-devel
+      - libxml2-devel
+      - ImageMagick
+      - ImageMagick-devel
     state: present
 
 - name: Install rbenv
@@ -54,6 +57,7 @@
 
 - name: Install rbenv-rehash, bundler, rails
   gem:
+    become: yes
     name: "{{ item }}"
     executable: "{{ rbenv_root }}/shims/gem"
     state: present
