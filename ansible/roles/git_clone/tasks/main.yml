@@ -8,7 +8,6 @@
     mode: "775"
 
 - name: Clone the repository
-  # shell: bash -lc "git clone {{ git_repo }} {{ clone_dest }}"
   git:
     repo: "{{ git_repo }}"
     dest: "{{ clone_dest }}"
