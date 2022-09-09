@@ -56,8 +56,8 @@
 #     when: exitsting_bundler_version < "bundler_version"
 
 - name: Install rbenv-rehash, bundler, rails
+  become: yes
   gem:
-    become: yes
     name: "{{ item }}"
     executable: "{{ rbenv_root }}/shims/gem"
     state: present
