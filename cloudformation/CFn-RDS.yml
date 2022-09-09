@@ -29,7 +29,7 @@ Resources:
       Engine: MySQL
       MasterUsername: !Ref DBUser
       MasterUserPassword: !Ref DBPassword
-      DBName: wordpress
+      DBName: lecture14
       BackupRetentionPeriod: 0
       DBSubnetGroupName: !Ref DBSubnetGroup
       VPCSecurityGroups:
