@@ -16,9 +16,6 @@
       - libxml2-devel
       - libxslt-devel
       - sqlite-devel
-      - libxml2-devel
-      - ImageMagick
-      - ImageMagick-devel
     state: present
 
 - name: Install rbenv

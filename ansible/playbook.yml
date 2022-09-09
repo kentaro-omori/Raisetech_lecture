@@ -6,3 +6,5 @@
     - { role: nodejs, tags: nodejs }
     - { role: nginx, tags: nginx }
     - { role: ruby, tags: ruby }
+    - { role: mysql, tags: mysql}
+    - { role: start_app, tags: start_app}

@@ -1,4 +1,47 @@
 ---
+- name: Install Rails dependencies packages
+  yum:
+    name:
+      - libxml2-devel
+      - ImageMagick
+      - ImageMagick-devel
+    state: present
+
+- name:  Git Clone directory created
+  become: yes
+  block:
+  - name: For Nginx directory
+    file:
+      path: /var/www
+      state: directory
+      owner: "{{ ec2-user }}"
+      group: "{{ ec2-user }}"
+      mode: "775"
+
+- name: Clone the repository
+  shell: bash -lc "git clone {{ git_repo }} {{ clone_dest }}"
+
+- name: Change directory and bundle install
+  command:
+    cmd: bash -lc "bundle install"
+    chdir: "/var/www/{{ app_name }}"
+
 - name: Start nginxd
   become: yes
-  shell: bash -lc "systemctl start nginx.service"
+  shell: bash -lc "systemctl start nginx.service"  
+
+- name: Set database
+  block:
+  - name: Create database
+    command:
+      cmd: bash -lc "rails db:create RAILS_ENV=production"
+      chdir: "/var/www/{{ app_name }}"
+  - name: Migrate database
+    command:
+      cmd: bash -lc "rails db:migrate RAILS_ENV=production"
+      chdir: "/var/www/{{ app_name }}"
+
+- name: Start unicorn
+  command:
+    cmd: bash -lc "bundle exec unicorn_rails -c "/var/www/{{ app_name }}/config/unicorn.rb" -D -E production"
+    chdir: "/var/www/{{ app_name }}"
