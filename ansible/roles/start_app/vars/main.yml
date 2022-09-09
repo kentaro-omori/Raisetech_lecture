@@ -1,3 +1,1 @@
-git_repo: 'https://github.com/yuta-ushijima/raisetech-live8-sample-app.git'
-clone_dest: /var/www
 app_name: raisetech-live8-sample-app
