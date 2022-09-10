@@ -1,5 +1,6 @@
 ---
 - name:  Git Clone directory created
+  become: yes
   file:
     path: /var/www
     state: directory
