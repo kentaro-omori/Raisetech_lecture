@@ -1,14 +1,26 @@
 ---
-- name:  Git Clone directory created
-  become: yes
-  file:
-    path: /var/www/raisetech-live8-sample-app
-    state: directory
-    owner: ec2-user
-    group: ec2-user
-    mode: "775"
+- name: Check if masterkey exists
+  stat:
+    path: "/var/www/{{ app_name }}/config/master.key"
+  register: masterkey_stat
 
-- name: Clone the repository
-  git:
-    repo: "{{ git_repo }}"
-    dest: "{{ clone_dest }}"
+- name:  Git Clone directory created
+  block:
+    - name: Git Clone directory created
+        become: yes
+        file:
+          path: /var/www/raisetech-live8-sample-app
+          state: directory
+          owner: ec2-user
+          group: ec2-user
+          mode: "775"
+    - name: Clone the repository
+        git:
+          repo: "{{ git_repo }}"
+          dest: "{{ clone_dest }}"
+  when: not masterkey_stat.stat.exists
+
+# - name: Clone the repository
+#   git:
+#     repo: "{{ git_repo }}"
+#     dest: "{{ clone_dest }}"
