@@ -32,7 +32,7 @@
       RAILS_ENV: production
 
 - name: Create config/unicorn.rb
-    template:
+  template:
     src: roles/start_app/templates/unicorn.rb.j2
     dest: "/var/www/{{ app_name }}/config/unicorn.rb"
     owner: ec2-user
