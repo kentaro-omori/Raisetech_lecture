@@ -5,12 +5,12 @@ upstream unicorn {
 
 server {
     listen       80;
-    server_name  localhost;
+    server_name  35.79.171.98;
 
     access_log  /var/log/nginx/access.log;
     error_log /var/log/nginx/error.log;
 
-    root /var/www/raisetech-live8-sample-app/public; #Railsプロジェクを指定
+    root /var/www/raisetech-live8-sample-app/public; #Railsプロジェクトを指定
 
     try_files $uri/index.html $uri.html $uri @unicorn;
 
