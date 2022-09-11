@@ -19,18 +19,17 @@
 
 - name: Set master.key
   block: 
-  - name: Touch master.key
-    file:
-      path: "/var/www/{{ app_name }}/config/master.key"
-      state: touch
-  - name: Set master key to env
-    vars:
-      master_key: "{{ lookup('env', 'rails_master_key') }}"
-  - name: Edit master.key
-    lineinfile:
-      path: "/var/www/{{ app_name }}/config/master.key"
-      insertafter: EOF
-      line: "{{ master_key }}"
+    - name: Touch master.key
+      file:
+        path: "/var/www/{{ app_name }}/config/master.key"
+        state: touch
+    - name: Edit master.key
+      vars:
+        master_key: "{{ lookup('env', 'rails_master_key') }}"
+      lineinfile:
+        path: "/var/www/{{ app_name }}/config/master.key"
+        insertafter: EOF
+        line: "{{ master_key }}"
   when: not masterkey_stat.stat.exists
 
 - name: Start nginxd
