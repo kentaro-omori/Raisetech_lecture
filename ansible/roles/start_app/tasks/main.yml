@@ -27,7 +27,7 @@
     lineinfile:
       path: "/var/www/{{ app_name }}/config/master.key"
       insertafter: EOF
-      line: lookup("env", "rails_master_key")
+      line: {{ lookup("env", "rails_master_key") }}
   when: not masterkey_stat.stat.exists
 
 - name: Start nginxd
