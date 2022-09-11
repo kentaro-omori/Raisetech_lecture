@@ -23,13 +23,13 @@
       cmd: bash -lc "bundle exec rails db:create"
       chdir: "/var/www/{{ app_name }}"
     environment:
-    RAILS_ENV: production
+      RAILS_ENV: production
   - name: Migrate database
     command:
       cmd: bash -lc "bundle exec rails db:migrate"
       chdir: "/var/www/{{ app_name }}"
     environment:
-    RAILS_ENV: production
+      RAILS_ENV: production
 
 - name: Start unicorn
   command:
