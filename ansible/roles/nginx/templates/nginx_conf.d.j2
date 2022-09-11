@@ -1,6 +1,6 @@
 upstream unicorn {
     #railsアプリケーションのunicorn.sockを指定する
-    server unix:/home/ec2-user/Raisetech_lecture/tmp/sockets/.unicorn.sock;
+    server unix:/var/www/raisetech-live8-sample-app/tmp/sockets/.unicorn.sock;
 }
 
 server {
@@ -10,7 +10,7 @@ server {
     access_log  /var/log/nginx/access.log;
     error_log /var/log/nginx/error.log;
 
-    root /home/ec2-user/Raisetech_lecture/public; #Railsプロジェクを指定
+    root /var/www/raisetech-live8-sample-app/public; #Railsプロジェクを指定
 
     try_files $uri/index.html $uri.html $uri @unicorn;
 

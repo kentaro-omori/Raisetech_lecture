@@ -31,6 +31,13 @@
     environment:
       RAILS_ENV: production
 
+- name: Create config/unicorn.rb
+    template:
+    src: roles/start_app/templates/unicorn.rb.j2
+    dest: "/var/www/{{ app_name }}/config/unicorn.rb"
+    owner: ec2-user
+    group: ec2-user
+
 - name: Start unicorn
   command:
     cmd: bash -lc "bundle exec unicorn_rails -c "/var/www/{{ app_name }}/config/unicorn.rb" -D -E production"
