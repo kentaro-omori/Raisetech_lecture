@@ -12,6 +12,24 @@
     cmd: bash -lc "bundle install"
     chdir: "/var/www/{{ app_name }}"
 
+- name: Check if masterkey exists
+  stat:
+    path: "/var/www/{{ app_name }}/config/master.key"
+  register: masterkey_stat
+
+- name: Set master.key
+  block: 
+  - name: Touch master.key
+    file:
+      path: "/var/www/{{ app_name }}/config/master.key"
+      state: touch
+  - name: Edit master.key
+    lineinfile:
+      path: "/var/www/{{ app_name }}/config/master.key"
+      insertafter: EOF
+      line: lookup("env", "rails_master_key")
+  when: not masterkey_stat.stat.exists
+
 - name: Start nginxd
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
@@ -28,8 +46,8 @@
     command:
       cmd: bash -lc "bundle exec rails db:migrate"
       chdir: "/var/www/{{ app_name }}"
-    environment:
-      RAILS_ENV: production
+    # environment:
+    #   RAILS_ENV: production
 
 - name: Create config/unicorn.rb
   template:

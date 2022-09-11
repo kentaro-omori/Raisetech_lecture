@@ -63,6 +63,12 @@ jobs:
         default: NONEXISTENT_ANSIBLE_SSH_KEY
     steps:
       - checkout
+      - run:
+          name: Set Environmental Variables
+          command: |
+            echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
+            source $BASH_ENV
+
       - ansible/install:
           version: <<parameters.version>>
       - ansible/playbook:
