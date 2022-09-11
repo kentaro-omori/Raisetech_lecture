@@ -20,12 +20,14 @@
   block:
   - name: Create database
     command:
-      cmd: bash -lc "bundle exec rails db:create RAILS_ENV=production"
+      cmd: bash -lc "bundle exec rails db:create"
       chdir: "/var/www/{{ app_name }}"
   - name: Migrate database
     command:
-      cmd: bash -lc "bundle exec rails db:migrate RAILS_ENV=production"
+      cmd: bash -lc "bundle exec rails db:migrate"
       chdir: "/var/www/{{ app_name }}"
+  environment:
+  RAILS_ENV: production
 
 - name: Start unicorn
   command:
