@@ -25,7 +25,7 @@
       state: touch
   - name: Set master key to env
     vars:
-      master_key: "{{ lookup("env", "rails_master_key") }}"
+      master_key: "{{ lookup('env', 'rails_master_key') }}"
   - name: Edit master.key
     lineinfile:
       path: "/var/www/{{ app_name }}/config/master.key"
