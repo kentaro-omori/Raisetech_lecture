@@ -1,31 +1,28 @@
-$worker  = 2
-$timeout = 30
-$app_dir = File.expand_path('../../', __FILE__)
-$listen  = File.expand_path 'tmp/sockets/.unicorn.sock', $app_dir
-$pid     = File.expand_path 'tmp/pids/unicorn.pid', $app_dir
-$std_log = File.expand_path 'log/unicorn.log', $app_dir
-# set config
-worker_processes  $worker
-working_directory $app_dir
-stderr_path $std_log
-stdout_path $std_log
-timeout $timeout
-listen  $listen
-pid $pid
-# loading booster
+worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
+timeout 15
 preload_app true
-# before starting processes
+
+listen '/var/www/raisetech-live8-sample-app/unicorn.sock'
+pid    '/var/www/raisetech-live8-sample-app/unicorn.pid'
+
 before_fork do |server, worker|
-    defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!
-    old_pid = "#{server.config[:pid]}.oldbin"
-    if old_pid != server.pid
-        begin
-            Process.kill "QUIT", File.read(old_pid).to_i
-            rescue Errno::ENOENT, Errno::ESRCH
-        end
-    end
+  Signal.trap 'TERM' do
+    puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
+    Process.kill 'QUIT', Process.pid
+  end
+
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.connection.disconnect!
 end
-# after finishing processes
+
 after_fork do |server, worker|
-    defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+  Signal.trap 'TERM' do
+    puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to send QUIT'
+  end
+
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.establish_connection
 end
+
+stderr_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])
+stdout_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])
