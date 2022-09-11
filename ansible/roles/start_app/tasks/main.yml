@@ -63,5 +63,5 @@
 
 - name: Start unicorn
   command:
-    cmd: bash -lc "bundle exec unicorn_rails -c "/var/www/{{ app_name }}/config/unicorn.rb" -D -E production"
+    cmd: bash -lc "bundle exec unicorn_rails -c '/var/www/{{ app_name }}/config/unicorn.rb' -D -E production"
     chdir: "/var/www/{{ app_name }}"
