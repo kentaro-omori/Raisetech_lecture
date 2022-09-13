@@ -29,6 +29,11 @@ Resources:
       DefaultActions: 
         - Type: forward
           TargetGroupArn: !Ref FrontLBTargetGroup
+      Port: 3000
+      Protocol: HTTP 
+      DefaultActions: 
+        - Type: forward
+          TargetGroupArn: !Ref FrontLBTargetGroup
 
   FrontLBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -37,6 +42,12 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub ${VPCStack}-VPCID
       Port: 80
+      Protocol: HTTP
+      HealthCheckPath: /
+      Targets:
+        - Id:
+            Fn::ImportValue: !Sub ${EC2Stack}-CFnEC2
+      Port: 3000
       Protocol: HTTP
       HealthCheckPath: /
       Targets:
@@ -53,6 +64,10 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
           CidrIp: 0.0.0.0/0
 
 Outputs:
