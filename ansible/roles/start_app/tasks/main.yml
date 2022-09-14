@@ -33,6 +33,13 @@
         line: "{{ master_key }}"
   when: not masterkey_stat.stat.exists
 
+# expectモジュールをwebpackerのインストール時に使用できるようにするため必要
+- name: Install pexpect
+  become: yes
+  pip:
+    name: pexpect
+    executable: pip3.7
+
 - name: Install webpacker
   become: yes
   expect:
