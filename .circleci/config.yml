@@ -111,7 +111,7 @@ workflows:
       - execute-ansible:
           inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
-          playbook-options: '-vvv'
+          playbook-options: '-vvvv'
           private-key: ANSIBLE_SSH_KEY
           requires:
             - "execute-cloudformation"
