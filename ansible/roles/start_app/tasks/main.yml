@@ -33,11 +33,15 @@
   when: not masterkey_stat.stat.exists
 
 - name: Install webpacker
-  command:
-    cmd: bash -lc "bundle exec rails webpacker:install"
-    chdir: "/var/www/{{ app_name }}"
-  environment:
-    RAILS_ENV: production  
+  become: yes
+  expect:
+    command:
+      cmd: bash -lc "bundle exec rails webpacker:install"
+      chdir: "/var/www/{{ app_name }}"
+    environment:
+      RAILS_ENV: production  
+    responses:
+      (.*)Overwrite (.*)Gemfile(.*): "n"
 
 - name: Start nginxd
   become: yes
