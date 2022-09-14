@@ -41,7 +41,7 @@
     environment:
       RAILS_ENV: production  
     responses:
-      (.*)Overwrite (.*)Gemfile(.*): "n"
+      (.*)Overwrite (.*): "n"
 
 - name: Start nginxd
   become: yes
