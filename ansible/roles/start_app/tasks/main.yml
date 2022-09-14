@@ -43,7 +43,7 @@
 - name: Install webpacker
   become: yes
   expect:
-    command: "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
+    command: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
     chdir: "/var/www/{{ app_name }}"
     # environment:
     #   RAILS_ENV: production 
