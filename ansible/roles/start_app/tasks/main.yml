@@ -32,6 +32,13 @@
         line: "{{ master_key }}"
   when: not masterkey_stat.stat.exists
 
+- name: Install webpacker
+  command:
+    cmd: bash -lc "bundle exec rails webpacker:install"
+    chdir: "/var/www/{{ app_name }}"
+  environment:
+    RAILS_ENV: production  
+
 - name: Start nginxd
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
