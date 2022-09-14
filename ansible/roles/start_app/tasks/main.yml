@@ -8,6 +8,7 @@
     state: present
 
 - name: Change directory and bundle install
+  become: yes
   command:
     cmd: bash -lc "bundle install"
     chdir: "/var/www/{{ app_name }}"
