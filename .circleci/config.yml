@@ -39,7 +39,7 @@ jobs:
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
             aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > temp.yml
-            scp -i $ANSIBLE_SSH_KEY temp.yml $USER_NAME@$HOST_NAME:/home/ec2-user
+            scp -i $ANSIBLE_SSH_KEY temp.yml $USER_NAME@$HOST_NAME:/home/ec2-user -oStrictHostKeyChecking=no
 
   execute-ansible:
     executor: python
