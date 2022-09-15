@@ -7,10 +7,10 @@ Parameters:
     Default: lecture14-VPC
   DBUser:
     Type: String
-    Default: !Ref DB_USERNAME
+    # Default: !Ref DB_USERNAME
   DBPassword:
     Type: String
-    Default: !Ref DB_PASSWORD
+    # Default: !Ref DB_PASSWORD
     NoEcho: true
   Env:
     Type: String
