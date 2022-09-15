@@ -7,6 +7,21 @@
       - ImageMagick-devel
     state: present
 
+- name: Register Environmental Variable
+  become: yes
+  command: 
+    cmd: ssh -t "{{ lookup('env', 'ec2_host_name') }}" \
+           '"{{ lookup('env', 'db_user_name') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME") \
+            "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
+            "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
+            bash'
+
+# # 一時ファイルを削除
+# - name: Remove temp.yml
+#   file:
+#     path: ~/temp.yml
+#     state: absent
+
 - name: Change directory and bundle install
   become: yes
   command:
@@ -45,8 +60,6 @@
   expect:
     command: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
     chdir: "/var/www/{{ app_name }}"
-    # environment:
-    #   RAILS_ENV: production 
     responses:
       (.*)Overwrite (.*): "n"
  

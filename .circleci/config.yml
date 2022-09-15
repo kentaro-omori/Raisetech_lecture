@@ -20,21 +20,22 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_DEFAULT_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-      - run:
-          name: Set Environmental Variables for RDS
-          command: |
-            echo "export RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME=$DB_USER_NAME" >> $BASH_ENV
-            echo "export RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD=$DB_PASSWORD" >> $BASH_ENV
-            source $BASH_ENV
+      # - run:
+      #     name: Set Environmental Variables for RDS
+      #     command: |
+      #       echo "export DB_USERNAME=$DB_USER_NAME" >> $BASH_ENV
+      #       echo "export DB_PASSWORD=$DB_PASSWORD" >> $BASH_ENV
+      #       source $BASH_ENV
       - run:
           name: Deploy CloudFormation
           command: |
             set -x
             aws cloudformation deploy --stack-name lecture14-VPC --template-file cloudformation/CFn-VPC.yml
             aws cloudformation deploy --stack-name lecture14-EC2 --template-file cloudformation/CFn-EC2.yml
-            aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml
+            aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml --parameter-overrides DB_USER_NAME=$DB_USER_NAME DB_PASSWORD=$DB_PASSWORD
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
+            aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > temp.yml
 
   execute-ansible:
     executor: python
@@ -70,11 +71,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set Environmental Variables
+          name: Set Environmental Variables for ansible
           command: |
             echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
+            echo "export db_user_name=$DB_USER_NAME" >> $BASH_ENV
+            echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
+            DB_ENDPOINT_NAME=$(cat test.yml)
+            echo "export db_endpoint=${DB_ENDPOINT_NAME}" >> $BASH_ENV
             source $BASH_ENV
-
       - ansible/install:
           version: <<parameters.version>>
       - ansible/playbook:
