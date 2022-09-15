@@ -76,7 +76,7 @@ jobs:
             echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
             echo "export db_user_name=$DB_USER_NAME" >> $BASH_ENV
             echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
-            DB_ENDPOINT_NAME=$(cat test.yml)
+            DB_ENDPOINT_NAME=$(cat temp.yml)
             echo "export db_endpoint=${DB_ENDPOINT_NAME}" >> $BASH_ENV
             source $BASH_ENV
       - ansible/install:
