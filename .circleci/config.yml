@@ -16,9 +16,9 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
       - aws-cli/setup:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_DEFAULT_REGION
@@ -39,7 +39,7 @@ jobs:
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
             aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > temp.yml
-            scp -i $ANSIBLE_SSH_KEY temp.yml $USER_NAME@$HOST_NAME:/home/ec2-user -oStrictHostKeyChecking=no
+            scp -oStrictHostKeyChecking=no temp.yml $USER_NAME@$HOST_NAME:/home/ec2-user
 
   execute-ansible:
     executor: python
