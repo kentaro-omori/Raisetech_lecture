@@ -32,8 +32,6 @@ Resources:
       UserData: !Base64 |
         #! /bin/bash
         sudo yum update -y
-        export RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME= !Ref DB_USER_NAME \
-               RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD= !Ref DB_PASSWORD
       SecurityGroupIds:
         - !Ref EC2SG
       KeyName: !Ref KeyName

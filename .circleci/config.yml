@@ -38,8 +38,11 @@ jobs:
             aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml --parameter-overrides DB_USER_NAME=$DB_USER_NAME DB_PASSWORD=$DB_PASSWORD
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
-            aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > temp.yml
-            scp -oStrictHostKeyChecking=no temp.yml $USER_NAME@$HOST_NAME:/home/ec2-user
+            aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > /tmp/RDS-endpoint.yml
+      # RDSエンドポイントを以降のjobと共有するためWorkspaceを使用
+      - persist_to_workspace:
+          root: /tmp
+          paths: RDS-endpoint.yml
 
   execute-ansible:
     executor: python
@@ -74,13 +77,15 @@ jobs:
         default: NONEXISTENT_ANSIBLE_SSH_KEY
     steps:
       - checkout
+      - attach_workspace:
+          at: /tmp
       - run:
           name: Set Environmental Variables for ansible
           command: |
             echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
             echo "export db_user_name=$DB_USER_NAME" >> $BASH_ENV
             echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
-            DB_ENDPOINT_NAME=$(cat temp.yml)
+            DB_ENDPOINT_NAME=$(cat /temp/RDS-endpoint.yml)
             echo "export db_endpoint=${DB_ENDPOINT_NAME}" >> $BASH_ENV
             source $BASH_ENV
       - ansible/install:
