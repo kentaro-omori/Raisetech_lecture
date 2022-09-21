@@ -29,6 +29,8 @@ jobs:
       #       echo "export DB_USERNAME=$DB_USER_NAME" >> $BASH_ENV
       #       echo "export DB_PASSWORD=$DB_PASSWORD" >> $BASH_ENV
       #       source $BASH_ENV
+      # Workspace用のDirを作成
+      - run: mkdir -p /tmp/workspace
       - run:
           name: Deploy CloudFormation
           command: |
@@ -40,7 +42,6 @@ jobs:
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
             aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > /tmp/workspace/RDS-endpoint.yml
       # RDSエンドポイントを以降のjobと共有するためWorkspaceを使用
-      - run: mkdir -p /tmp/workspace
       - persist_to_workspace:
           root: /tmp/workspace
           paths: RDS-endpoint.yml
