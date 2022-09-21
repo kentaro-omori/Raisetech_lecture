@@ -84,6 +84,7 @@ jobs:
       - run:
           name: Set Environmental Variables for ansible
           command: |
+            echo "export ec2_host_name=$HOST_NAME" >> $BASH_ENV
             echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
             echo "export db_user_name=$DB_USER_NAME" >> $BASH_ENV
             echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
