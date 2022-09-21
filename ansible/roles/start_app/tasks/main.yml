@@ -15,11 +15,10 @@
     #         "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
     #         "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST") \
     #         bash'
-  command: |
-    bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME={{ lookup('env', 'db_user_name') }} >> /etc/environment"
-    bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD={{ lookup('env', 'db_password') }} >> /etc/environment"
-    bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST={{ lookup('env', 'db_endpoint') }} >> /etc/environment"
-    bash -lc "exec $SHELL -l"
+  command: bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME={{ lookup('env', 'db_user_name') }} >> /etc/environment"
+  command: bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD={{ lookup('env', 'db_password') }} >> /etc/environment"
+  command: bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST={{ lookup('env', 'db_endpoint') }} >> /etc/environment"
+  command: bash -lc "exec $SHELL -l"
 
 # # 一時ファイルを削除
 # - name: Remove temp.yml
