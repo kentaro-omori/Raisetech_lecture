@@ -38,10 +38,11 @@ jobs:
             aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml --parameter-overrides DB_USER_NAME=$DB_USER_NAME DB_PASSWORD=$DB_PASSWORD
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml
-            aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > /tmp/RDS-endpoint.yml
+            aws cloudformation describe-stacks --stack-name lecture14-RDS --query "Stacks[].Outputs[].[OutputValue]" --output text > /tmp/workspace/RDS-endpoint.yml
       # RDSエンドポイントを以降のjobと共有するためWorkspaceを使用
+      - run: mkdir -p /tmp/workspace
       - persist_to_workspace:
-          root: /tmp
+          root: /tmp/workspace
           paths: RDS-endpoint.yml
 
   execute-ansible:
@@ -78,14 +79,14 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp
+          at: /tmp/workspace
       - run:
           name: Set Environmental Variables for ansible
           command: |
             echo "export rails_master_key=$RAILS_MASTER_KEY" >> $BASH_ENV
             echo "export db_user_name=$DB_USER_NAME" >> $BASH_ENV
             echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
-            DB_ENDPOINT_NAME=$(cat /tmp/RDS-endpoint.yml)
+            DB_ENDPOINT_NAME=$(cat /tmp/workspace/RDS-endpoint.yml)
             echo "export db_endpoint=${DB_ENDPOINT_NAME}" >> $BASH_ENV
             source $BASH_ENV
       - ansible/install:

@@ -7,7 +7,7 @@
       - ImageMagick-devel
     state: present
 
-- name: Register Environmental Variable
+- name: Register Environmental Variables
   become: yes
   command: 
     cmd: ssh -t "{{ lookup('env', 'ec2_host_name') }}" \
