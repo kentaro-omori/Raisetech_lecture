@@ -10,7 +10,7 @@
 - name: Register Environmental Variables
   become: yes
   command: 
-    cmd: ssh -t "{{ lookup('env', 'ec2_host_name') }}" \
+    cmd: ssh -oStrictHostKeyChecking=no -t "{{ lookup('env', 'ec2_host_name') }}" -i "{{ lookup('env', 'ansible_ssh_key') }}" \
            '"{{ lookup('env', 'db_user_name') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME") \
             "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
             "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \

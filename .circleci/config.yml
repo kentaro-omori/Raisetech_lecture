@@ -90,6 +90,7 @@ jobs:
             echo "export db_password=$DB_PASSWORD" >> $BASH_ENV
             DB_ENDPOINT_NAME=$(cat /tmp/workspace/RDS-endpoint.yml)
             echo "export db_endpoint=${DB_ENDPOINT_NAME}" >> $BASH_ENV
+            echo "export ansible_ssh_key=$ANSIBLE_SSH_KEY" >> $BASH_ENV
             source $BASH_ENV
       - ansible/install:
           version: <<parameters.version>>
