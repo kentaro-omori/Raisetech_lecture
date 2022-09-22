@@ -27,10 +27,10 @@
 #     path: ~/temp.yml
 #     state: absent
 
-- name: Change directory and bundle install
+- name: Change directory and bundle install(Skip installation of development and test environments)
   become: yes
   command:
-    cmd: bash -lc "bundle install"
+    cmd: bash -lc "bundle install --without development test"
     chdir: "/var/www/{{ app_name }}"
 
 - name: Check if masterkey exists
@@ -63,7 +63,7 @@
 - name: Install webpacker
   become: yes
   expect:
-    command: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
+    shell: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
     chdir: "/var/www/{{ app_name }}"
     responses:
       (.*)Overwrite (.*): "n"
@@ -73,12 +73,12 @@
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
 
-# これがないとCreate databaseでエラーになる
-- name: Skip installation of development and test environments
-  become: yes
-  command:
-    cmd: bash -lc "bundle install --without development test"
-    chdir: "/var/www/{{ app_name }}" 
+# # これがないとCreate databaseでエラーになる
+# - name: Skip installation of development and test environments
+#   become: yes
+#   command:
+#     cmd: bash -lc "bundle install --without development test"
+#     chdir: "/var/www/{{ app_name }}" 
 
 - name: Set database
   block:
