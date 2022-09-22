@@ -73,6 +73,13 @@
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
 
+# これがないとCreate databaseでエラーになる
+- name: Skip installation of development and test environments
+  become: yes
+  command:
+    cmd: bash -lc "bundle install --without development test"
+    chdir: "/var/www/{{ app_name }}" 
+
 - name: Set database
   block:
   - name: Create database
