@@ -7,19 +7,19 @@
       - ImageMagick-devel
     state: present
 
-# - name: Register Environmental Variables
-#   become: yes
-#   # command: 
-#     # cmd: ssh -oStrictHostKeyChecking=no -t "{{ lookup('env', 'ec2_host_name') }}" -i "{{ lookup('env', 'ansible_ssh_key') }}" \
-#     #        '"{{ lookup('env', 'db_user_name') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME") \
-#     #         "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
-#     #         "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST") \
-#     #         bash'
-#   shell: 
-#     cmd: |
-#       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME={{ lookup('env', 'db_user_name') }} > /etc/environment"
-#       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD={{ lookup('env', 'db_password') }} >> /etc/environment"
-#       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST={{ lookup('env', 'db_endpoint') }} >> /etc/environment"
+- name: Register Environmental Variables
+  become: yes
+  # command: 
+    # cmd: ssh -oStrictHostKeyChecking=no -t "{{ lookup('env', 'ec2_host_name') }}" -i "{{ lookup('env', 'ansible_ssh_key') }}" \
+    #        '"{{ lookup('env', 'db_user_name') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME") \
+    #         "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
+    #         "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST") \
+    #         bash'
+  shell: 
+    cmd: |
+      bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME={{ lookup('env', 'db_user_name') }} > /etc/environment"
+      bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD={{ lookup('env', 'db_password') }} >> /etc/environment"
+      bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST={{ lookup('env', 'db_endpoint') }} >> /etc/environment"
 
 # # 一時ファイルを削除
 # - name: Remove temp.yml
