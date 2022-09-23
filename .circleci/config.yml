@@ -36,7 +36,7 @@ jobs:
           command: |
             set -x
             aws cloudformation deploy --stack-name lecture14-VPC --template-file cloudformation/CFn-VPC.yml
-            aws cloudformation deploy --stack-name lecture14-EC2 --template-file cloudformation/CFn-EC2.yml
+            aws cloudformation deploy --stack-name lecture14-EC2 --template-file cloudformation/CFn-EC2.yml --parameter-overrides EIPAddress=$HOST_NAME
             aws cloudformation deploy --stack-name lecture14-RDS --template-file cloudformation/CFn-RDS.yml --parameter-overrides DBUser=$DB_USER_NAME DBPassword=$DB_PASSWORD
             aws cloudformation deploy --stack-name lecture14-ELB --template-file cloudformation/CFn-ELB.yml
             aws cloudformation deploy --stack-name lecture14-S3 --template-file cloudformation/CFn-S3.yml

@@ -7,11 +7,9 @@ Parameters:
     Default: lecture14-VPC
   DBUser:
     Type: String
-    # Default: 'KentaroOmori'
     Default: 'temp_user_name'
   DBPassword:
     Type: String
-    # Default: '1234ABCD%%%%'
     Default: 'temp_db_password'
     NoEcho: true
   Env:
