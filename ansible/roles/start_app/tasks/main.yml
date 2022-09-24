@@ -105,9 +105,17 @@
     group: ec2-user
 
 # - name: Check unicorn status
+- name: Check APP server startup
+  uri:
+    url: http://"{{ lookup('env', 'ec2_host_name') }}"
+  register: status_code
 
+-name: debug
+  debug:
+  msg: "{{ status_code }}"
 
 - name: Start unicorn
   command:
     cmd: bash -lc "bundle exec unicorn_rails -c '/var/www/{{ app_name }}/config/unicorn.rb' -D -E production"
     chdir: "/var/www/{{ app_name }}"
+  when: not status_code==200
