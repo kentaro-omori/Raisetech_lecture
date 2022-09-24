@@ -29,9 +29,9 @@ describe service('nginx') do
   it { should be_running }
 end
 
-# unicornの起動確認
-describe service('unicorn') do
-  it { should be_running }
+# unicorn.sockの存在確認
+describe file('/var/www/raisetech-live8-sample-app/tmp/unicorn.sock') do
+  it { should be_socket }
 end
 
 
