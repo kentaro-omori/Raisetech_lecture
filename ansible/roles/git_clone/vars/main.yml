@@ -1,0 +1,2 @@
+git_repo: 'https://github.com/kentaro-omori/raisetech-live8-sample-app.git'
+clone_dest: /var/www/raisetech-live8-sample-app

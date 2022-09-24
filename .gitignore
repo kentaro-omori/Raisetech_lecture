@@ -1,0 +1,2 @@
+# inventoryはCircleCIの環境変数に登録するため
+ansible/hosts/

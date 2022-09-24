@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: RaiseTech lecture14 template for EC2
+
+# Parametersを指定
+Parameters:
+  VPCStack:
+    Type: String
+    Default: lecture14-VPC
+  EC2AMI:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  KeyName:
+    Type: String
+    Default: lecture14
+  EIPAddress:
+    Type: String
+    Default: 'temp_ec2_EIP'
+  Env:
+    Type: String
+    Default: lecture14
+
+# EC2インスタンスの作成
+Resources:
+  CFnEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref EC2AMI
+      InstanceType: t2.micro
+      SubnetId:
+        Fn::ImportValue: !Sub ${VPCStack}-PublicSubnetA
+      # 各種インストールやサーバーの起動を行う時はUserDataに記述
+      UserData: !Base64 |
+        #! /bin/bash
+        sudo yum update -y
+      SecurityGroupIds:
+        - !Ref EC2SG
+      KeyName: !Ref KeyName
+      Tags:
+        - Key: Name
+          Value: !Sub ${Env}-EC2
+
+# EIPの新規作成 今回は不使用 
+  # GetSetEIPforEC2:
+  #   Type: AWS::EC2::EIP
+  #   Properties:
+  #     InstanceId: !Ref CFnEC2
+
+# 既存EIPのアタッチ
+  SetEIPforEC2:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      EIP: !Ref EIPAddress
+      InstanceId: !Ref CFnEC2
+
+# EC2用のセキュリティグループを作成
+  EC2SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SG for lecture14 EC2
+      VpcId:
+        Fn::ImportValue: !Sub ${VPCStack}-VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 80
+          ToPort: 80
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+      Tags:
+        - Key: Name
+          Value: !Sub ${Env}-EC2-SG
+
+Outputs:
+  CFnEC2:
+    Value: !Ref CFnEC2
+    Export:
+      Name: !Sub ${AWS::StackName}-CFnEC2

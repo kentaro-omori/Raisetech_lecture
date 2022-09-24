@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: RaiseTech lecture14 template for S3
+
+Parameters:
+  Env:
+    Type: String
+    Default: lecture14
+
+# S3作成(とりあえず作るだけ)
+Resources:
+  CFnS3:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties: 
+      BucketName: !Sub ${Env}-s3-20220720
