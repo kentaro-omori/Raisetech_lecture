@@ -16,19 +16,10 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - "d3:de:9f:6c:62:20:0d:d3:55:d6:b5:38:b4:6f:f5:39"
       - aws-cli/setup:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_DEFAULT_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-      # - run:
-      #     name: Set Environmental Variables for RDS
-      #     command: |
-      #       echo "export DB_USERNAME=$DB_USER_NAME" >> $BASH_ENV
-      #       echo "export DB_PASSWORD=$DB_PASSWORD" >> $BASH_ENV
-      #       source $BASH_ENV
       # Workspace用のDirを作成
       - run: mkdir -p /tmp/workspace
       - run:
