@@ -107,17 +107,18 @@
 # - name: Check unicorn status
 - name: Check APP server startup
   uri:
-    url: http://"{{ lookup('env', 'ec2_host_name') }}"
+    # url: http://"{{ lookup('env', 'ec2_host_name') }}"
+    url: http://35.79.171.98
   register: uri_result
   ignore_errors: yes
 
 - name: test unicorn
   debug:
-    msg: "{{ uri_result.status_code }}"
+    msg: "{{ uri_result.status }}"
 
 
 - name: Start unicorn
   command:
     cmd: bash -lc "bundle exec unicorn_rails -c '/var/www/{{ app_name }}/config/unicorn.rb' -D -E production"
     chdir: "/var/www/{{ app_name }}"
-  when: not uri_result.status_code==200
+  when: not uri_result.status==200
