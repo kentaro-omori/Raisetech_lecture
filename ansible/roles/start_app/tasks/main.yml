@@ -9,12 +9,6 @@
 
 - name: Register Environmental Variables
   become: yes
-  # command: 
-    # cmd: ssh -oStrictHostKeyChecking=no -t "{{ lookup('env', 'ec2_host_name') }}" -i "{{ lookup('env', 'ansible_ssh_key') }}" \
-    #        '"{{ lookup('env', 'db_user_name') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME") \
-    #         "{{ lookup('env', 'db_password') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD") \
-    #         "{{ lookup('env', 'db_endpoint') }}"=$(printf %q "$RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST") \
-    #         bash'
   shell: 
     cmd: |
       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_USERNAME={{ lookup('env', 'db_user_name') }} > /etc/environment"
@@ -54,6 +48,7 @@
     name: pexpect
     executable: pip3.7
 
+# デフォルトのタイムアウト(30s)だとタイムアウトするため、180に設定
 - name: Install webpacker
   become: yes
   expect:
@@ -74,13 +69,6 @@
 - name: Start nginxd
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
-
-# # これがないとCreate databaseでエラーになる
-# - name: Skip installation of development and test environments
-#   become: yes
-#   command:
-#     cmd: bash -lc "bundle install --without development test"
-#     chdir: "/var/www/{{ app_name }}" 
 
 - name: Set database
   block:
@@ -104,21 +92,15 @@
     owner: ec2-user
     group: ec2-user
 
-# - name: Check unicorn status
+# unicornが起動済みなら起動しないために、アクセス時のstatus codeを確認
 - name: Check APP server startup
   uri:
     url: "http://{{ lookup('env', 'ec2_host_name') }}"
-    # url: http://35.79.171.98
   register: uri_result
   ignore_errors: yes
-
-- name: test unicorn
-  debug:
-    msg: "{{ uri_result.status }}"
-
 
 - name: Start unicorn
   command:
     cmd: bash -lc "bundle exec unicorn_rails -c '/var/www/{{ app_name }}/config/unicorn.rb' -D -E production"
     chdir: "/var/www/{{ app_name }}"
-  when: not uri_result.status==200
+  when: uri_result.status==404

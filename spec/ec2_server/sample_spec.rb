@@ -2,33 +2,34 @@ require 'spec_helper'
 
 listen_port = 80
 
-# describe package('rails') do
-# #  it { should be_installed.with_version('2.6.3') }
-#   it { should be_installed.by('gem').with_version('6.1.3.1') }
-# end
-
-describe package('nginx') do
-  it { should be_installed }
-end
-
-describe service('nginx') do
-  # it { should be_enabled }
-  it { should be_running }
-end
-
-# describe package('unicorn') do
-#   it { should be_installed.by('gem') }
-# end
-
 describe port(listen_port) do
   it { should be_listening }
 end
 
-describe service('mysqld') do
-  it { should be_enabled }
+# bundlerの指定バージョンがインストールされているか確認
+describe package('bundler') do
+   it { should be_installed.by('gem').with_version('2.3.14') }
+end
+
+# Rubyの指定バージョンがインストールされているか確認
+describe command('ruby -v') do
+  let(:disable_sudo) { true }
+  its(:stdout) { should match /ruby 2\.6\.3+/ }
+end
+
+# Railsの指定バージョンがインストールされているか確認
+describe package('rails') do
+#  it { should be_installed.with_version('2.6.3') }
+  it { should be_installed.by('gem').with_version('6.1.3.1') }
+end
+
+# nginxの起動確認
+describe service('nginx') do
   it { should be_running }
 end
 
-describe port(3306) do
-  it { should be_listening }
+describe package('unicorn') do
+  it { should be_installed.by('gem') }
 end
+
+
