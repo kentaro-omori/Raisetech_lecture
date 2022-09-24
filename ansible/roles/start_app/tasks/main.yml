@@ -21,12 +21,6 @@
       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_PASSWORD={{ lookup('env', 'db_password') }} >> /etc/environment"
       bash -lc "echo RAISETECH_LIVE8_SAMPLE_APP_DATABASE_HOST={{ lookup('env', 'db_endpoint') }} >> /etc/environment"
 
-# # 一時ファイルを削除
-# - name: Remove temp.yml
-#   file:
-#     path: ~/temp.yml
-#     state: absent
-
 - name: Change directory and bundle install(Skip installation of development and test environments)
   become: yes
   command:
@@ -66,8 +60,10 @@
     command: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
     chdir: "/var/www/{{ app_name }}"
     responses:
-      (.*)Overwrite (.*): "n"
- 
+      (.*)Overwrite (.*):
+        - "n"
+        - "n"
+        - "n"
 
 - name: Start nginxd
   become: yes
