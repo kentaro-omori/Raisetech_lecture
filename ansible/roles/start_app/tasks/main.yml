@@ -63,6 +63,14 @@
       (.*)Overwrite (.*): "n"
     timeout: 180
 
+- name: Precompile the Rails application
+  become: yes
+  command:
+    cmd: bash -lc "bundle exec rails assets:precompile"
+    chdir: "/var/www/{{ app_name }}"    
+  environment:
+    RAILS_ENV: production
+
 - name: Start nginxd
   become: yes
   shell: bash -lc "systemctl start nginx.service"  
