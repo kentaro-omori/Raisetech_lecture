@@ -30,7 +30,7 @@ describe service('nginx') do
 end
 
 # unicorn.sockの存在確認
-describe file('/var/www/raisetech-live8-sample-app/tmp/unicorn.sock') do
+describe file('/var/www/raisetech-live8-sample-app/tmp/sockets/unicorn.sock') do
   it { should be_socket }
 end
 
