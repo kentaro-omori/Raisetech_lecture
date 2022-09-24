@@ -113,11 +113,11 @@
 
 - name: test unicorn
   debug:
-    msg: "{{ status_code }}"
+    msg: "{{ status_code.status }}"
 
 
 - name: Start unicorn
   command:
     cmd: bash -lc "bundle exec unicorn_rails -c '/var/www/{{ app_name }}/config/unicorn.rb' -D -E production"
     chdir: "/var/www/{{ app_name }}"
-  when: not status_code==200
+  when: not status_code.status==200
