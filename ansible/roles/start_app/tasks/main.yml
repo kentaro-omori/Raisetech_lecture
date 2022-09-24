@@ -107,8 +107,8 @@
 # - name: Check unicorn status
 - name: Check APP server startup
   uri:
-    # url: http://"{{ lookup('env', 'ec2_host_name') }}"
-    url: http://35.79.171.98
+    url: "http://{{ lookup('env', 'ec2_host_name') }}"
+    # url: http://35.79.171.98
   register: uri_result
   ignore_errors: yes
 
