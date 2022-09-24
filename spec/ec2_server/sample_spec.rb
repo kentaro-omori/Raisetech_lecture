@@ -7,8 +7,9 @@ describe port(listen_port) do
 end
 
 # bundlerの指定バージョンがインストールされているか確認
-describe package('bundler') do
-   it { should be_installed.by('gem').with_version('2.3.14') }
+describe command('bundler -v') do
+  let(:disable_sudo) { true }
+  its(:stdout) { should match /Bundler version 2\.3\.14/ }
 end
 
 # Rubyの指定バージョンがインストールされているか確認
@@ -18,9 +19,9 @@ describe command('ruby -v') do
 end
 
 # Railsの指定バージョンがインストールされているか確認
-describe package('rails') do
-#  it { should be_installed.with_version('2.6.3') }
-  it { should be_installed.by('gem').with_version('6.1.3.1') }
+describe command('rails -v') do
+  let(:disable_sudo) { true }
+  its(:stdout) { should match /Rails 6\.1\.3\.1/ }
 end
 
 # nginxの起動確認
@@ -28,8 +29,9 @@ describe service('nginx') do
   it { should be_running }
 end
 
-describe package('unicorn') do
-  it { should be_installed.by('gem') }
+# unicornの起動確認
+describe service('unicorn') do
+  it { should be_running }
 end
 
 
