@@ -60,10 +60,9 @@
     command: bash -lc "bundle exec rails webpacker:install RAILS_ENV{{'='}}production"
     chdir: "/var/www/{{ app_name }}"
     responses:
-      (.*)Overwrite (.*):
-        - "n"
-        - "n"
-        - "n"
+      (.*)Overwrite (.*): "n"
+      (.*)Overwrite (.*): "n"
+      (.*)Overwrite (.*): "n"
 
 - name: Start nginxd
   become: yes
