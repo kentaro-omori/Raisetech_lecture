@@ -109,6 +109,7 @@
   uri:
     url: http://"{{ lookup('env', 'ec2_host_name') }}"
   register: status_code
+  ignore_errors: yes
 
 - name: test unicorn
   debug:
