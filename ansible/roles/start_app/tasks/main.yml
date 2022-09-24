@@ -61,8 +61,7 @@
     chdir: "/var/www/{{ app_name }}"
     responses:
       (.*)Overwrite (.*): "n"
-      (.*)Overwrite (.*): "n"
-      (.*)Overwrite (.*): "n"
+    timeout: 180
 
 - name: Start nginxd
   become: yes
