@@ -19,8 +19,3 @@
         repo: "{{ git_repo }}"
         dest: "{{ clone_dest }}"
   when: not masterkey_stat.stat.exists
-
-# - name: Clone the repository
-#   git:
-#     repo: "{{ git_repo }}"
-#     dest: "{{ clone_dest }}"
