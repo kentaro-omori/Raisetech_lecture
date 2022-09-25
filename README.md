@@ -23,10 +23,12 @@ ruby: circleci/ruby@1.8.0
 ```
 
 ## 構成図
-(画像)
+![lecture14 drawio](https://user-images.githubusercontent.com/32190870/192124704-5c07ab3d-911c-48c9-9774-6e96364f20b0.png)
+
 
 ## CircleCI上で設定した環境変数
-(画像)
+![image](https://user-images.githubusercontent.com/32190870/192124728-73d152b2-ec9c-4542-9ba0-d370fa792dfe.png)
+
 
 ## 感想&学び
 * CloudFormation、Ansible、Serverspecそれぞれで苦戦はしたが、とにかくAnsibleによるRails環境構築に時間が掛かった。  
